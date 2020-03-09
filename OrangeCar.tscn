@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="StreamTexture" id=1]
+load_path = "res://.import/spritesheet_vehicles.png-e16a3162cc0edb8275366b9e44a79438.stex"
+
+[node name="Car" type="Sprite"]
+show_behind_parent = true
+rotation = 1.5708
+texture = SubResource( 1 )
+region_enabled = true
+region_rect = Rect2( 290, 0, 70, 133.444 )
