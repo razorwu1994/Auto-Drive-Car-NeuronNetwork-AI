@@ -19,6 +19,11 @@ config/name="Self-Driving-Car-2D"
 run/main_scene="res://World.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://Global.gd"
+FNNGEN="*res://NeuronNetwork.gd"
+
 [input]
 
 steer_left={

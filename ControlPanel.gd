@@ -1,5 +1,5 @@
 extends Control
-
+signal carSpawning
 export (NodePath) var player_path
 var SettingSlider = preload("res://SettingSlider.tscn")
 var player = null
@@ -40,6 +40,14 @@ func _input(event):
 		visible = !visible
 
 func _process(delta):
-	if player:
-		$Panel/VBoxContainer/Speedometer/Speed.text = "%4.1f" % player.velocity.length()
+	if !$PanelContainer/VBoxContainer/CheckButton.pressed:
+		$Panel.visible=false
+	else:
+		$Panel.visible=true
+		if player:
+			$Panel/VBoxContainer/Speedometer/Speed.text = "%4.1f" % player.velocity.length()
+
 		
+func _on_CheckButton_pressed():
+	emit_signal("carSpawning")
+

@@ -1,7 +1,7 @@
 extends Area2D
 
 signal finished
-var currentPosition = self.global_position
+var currentPosition = self.position
 
 func _on_EndPoint_body_entered(body):
 	var angleBtw = currentPosition.angle_to_point(body.position)

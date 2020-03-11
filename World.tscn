@@ -186,18 +186,14 @@ radius = 11.6309
 
 [sub_resource type="Curve2D" id=17]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 773.884, 1844.72, 522.922, 455.009, -522.922, -455.009, 2040.62, 1071.82, -176.683, 201.912, 176.683, -201.912, 1920.75, 235.701, 0, 0, 0, 0, 1256.04, -209.271, 95.8486, -235.5, -95.8486, 235.5, 192.118, -81.2823, 0, 0, 0, 0, 196.91, 973.347 )
+"points": PoolVector2Array( 0, 0, 0, 0, 846.339, 1522.04, -65.9488, 15.5918, 65.9488, -15.5918, 1855.25, 1505.29, 31.2926, 29.0549, -31.2926, -29.0549, 1912.62, 1005.07, 0, 0, 0, 0, 1837.44, 847.71, -228.03, 130.927, 228.03, -130.927, 1920.75, 235.701, 0, 0, 0, 0, 1653.8, -71.5373, 95.8486, -235.5, -95.8486, 235.5, 236.844, 28.5408, 0, 0, 0, 0, 196.91, 973.347 )
 }
 
 [node name="World" type="Node2D"]
-position = Vector2( -717.486, -1635.31 )
+position = Vector2( 130.941, 125.298 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_lock_": true
-}
 carX = 549.487
 carY = 2248.8
-population_size = 0
 engine_power = 800
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -210,7 +206,7 @@ tile_data = PoolIntArray( -1, 2, 0, -65536, 2, 0, -65535, 2, 0, -65534, 2, 0, -6
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ControlPanel" parent="CanvasLayer" instance=ExtResource( 4 )]
-visible = false
+player_path = NodePath("../../Car")
 
 [node name="DashLine" type="Area2D" parent="."]
 position = Vector2( 190.029, 1217.51 )
@@ -237,5 +233,6 @@ curve = SubResource( 17 )
 [node name="Car" parent="." instance=ExtResource( 3 )]
 position = Vector2( 578.181, 2214.64 )
 SELF_DRIVING = false
+[connection signal="carSpawning" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_carSpawning"]
 [connection signal="body_entered" from="DashLine" to="DashLine" method="_on_EndPoint_body_entered"]
 [connection signal="finished" from="DashLine" to="." method="_on_DashLine_finished"]

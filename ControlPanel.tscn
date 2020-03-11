@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://ControlPanel.gd" type="Script" id=1]
 [ext_resource path="res://font_x20.tres" type="DynamicFont" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 10.0
@@ -47,3 +48,65 @@ margin_right = 330.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 2 )
 text = "100"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 352.238
+margin_top = -2.3327
+margin_right = 575.238
+margin_bottom = 69.6673
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 216.0
+margin_bottom = 65.0
+
+[node name="CheckButton" type="CheckButton" parent="PanelContainer/VBoxContainer"]
+margin_right = 209.0
+margin_bottom = 40.0
+pressed = true
+text = "Show Control Center"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+margin_top = 44.0
+margin_right = 209.0
+margin_bottom = 58.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+margin_right = 104.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "Best Progress:"
+uppercase = true
+
+[node name="bestProgress" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 108.0
+margin_right = 136.0
+margin_bottom = 14.0
+text = "10%"
+
+[node name="CarGenerator" type="PanelContainer" parent="."]
+margin_left = 574.213
+margin_top = 0.859406
+margin_right = 652.213
+margin_bottom = 78.8594
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckButton" type="TextureButton" parent="CarGenerator"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 71.0
+margin_bottom = 71.0
+texture_normal = ExtResource( 3 )
+[connection signal="pressed" from="CarGenerator/CheckButton" to="." method="_on_CheckButton_pressed"]
