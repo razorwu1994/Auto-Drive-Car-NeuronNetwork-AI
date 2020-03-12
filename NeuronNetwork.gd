@@ -10,9 +10,10 @@ class Perceptron:
 	var activated=false
 	func _init(next_layer_nodes:int):
 		for i in range(next_layer_nodes):
-			self.weights.append(randomNumberFeeder(-Global.VARIANCE,Global.VARIANCE))
-			self.bias= randomNumberFeeder(-Global.VARIANCE,Global.VARIANCE)
-			
+			self.weights.append(Global.randomNumberFeeder(-Global.VARIANCE,Global.VARIANCE))
+			self.bias= Global.randomNumberFeeder(-Global.VARIANCE,Global.VARIANCE)
+		gene_mutate()
+		
 	func activate(in_value):
 		out_value = tanh(in_value)+bias
 		activated=true
@@ -27,9 +28,16 @@ class Perceptron:
 		else:
 			return []
 	
-	func randomNumberFeeder(openNum,closeNum):
-		return rand_range(openNum,closeNum)
-
+	func gene_mutate():
+		randomize()
+		weights.shuffle()
+		for weight in weights:
+			weight += rand_range(-Global.MUTATOR,Global.MUTATOR)
+	
+	func bias_mutate():
+		randomize()
+		bias=rand_range(-Global.VARIANCE,Global.VARIANCE)
+		
 	func set_weights(weights):
 		self.weights=weights
 		
@@ -41,7 +49,9 @@ class NeuronLayer:
 	func _init(currentLayerPs,nextLayerPs):
 		for i in range(currentLayerPs):
 			perceptrons.append(Perceptron.new(nextLayerPs))
-	
+		randomize()
+		perceptrons.shuffle()
+		
 	func analyze(inputs):
 		if inputs.size() != perceptrons.size():
 			return []
@@ -59,32 +69,43 @@ class NeuronNetwork:
 	var NN=[]
 	var NNLayersConfig
 #	var activated_layer
-	func _init(layersConfig,isLayerConfig):
+	func _init(layersConfig,initGenes):
 #		activated_layer=0
-		if isLayerConfig:
-			NNLayersConfig=layersConfig
-			for i in range(layersConfig.size()):
-				var currentLayerNodes = layersConfig[i]
-				var nextLayerNodes
-	
-				if i == layersConfig.size()-1:
-					nextLayerNodes=0
+		NNLayersConfig=layersConfig
+		for i in range(layersConfig.size()):
+			var currentLayerNodes = layersConfig[i]
+			var nextLayerNodes
+
+			if i == layersConfig.size()-1:
+				nextLayerNodes=0
+				for i in range(currentLayerNodes):
+					last_layer_outputs.append(0)
+			else:
+				if i == 0:
 					for i in range(currentLayerNodes):
-						last_layer_outputs.append(0)
-				else:
-					if i == 0:
-						for i in range(currentLayerNodes):
-							first_layer_inputs.append(0)
-					nextLayerNodes=layersConfig[i+1]
-					
+						first_layer_inputs.append(0)
+				nextLayerNodes=layersConfig[i+1]
+			if !initGenes:	
 				NN.append(NeuronLayer.new(currentLayerNodes,nextLayerNodes))
-	
+			else:
+			# takes an array of NeuronLayer of Nodes
+				var currentLayer = NeuronLayer.new(currentLayerNodes,nextLayerNodes)
+				for Nlayer in initGenes:
+					NN.append(currentLayer)
+					var ordinal=0
+					var currentNode
+					for node in Nlayer:
+						currentNode = currentLayer.perceptrons[ordinal]
+						currentNode.set_weights(node.weights)
+						currentNode.set_bias(node.bias)
+						
+						
 	func print_genes():
 		var genes=[]
 		for Nlayer in NN:
 			for p in Nlayer.perceptrons:
 				genes.append({"weights":p.weights,"bias":p.bias})
-#				print("weights: ", p.weights," bias: ",p.bias)
+		return genes
 	
 	func set_inputs(inputs):
 		if inputs.size() != first_layer_inputs.size():
@@ -116,3 +137,4 @@ class NeuronNetwork:
 		
 		last_layer_outputs=inputs
 		return true
+	 

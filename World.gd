@@ -4,7 +4,9 @@ export (float) var carY = 123
 export (int) var population_size = 20
 export (int) var engine_power = 2000
 var CAR = load("Car.tscn")
-var carsGameTree=[]
+var carsGameTree
+var generations
+var training
 # Helper functions
 func filter(filter_function: FuncRef, candidate_array: Array)->Array:
 	var filtered_array := []
@@ -24,9 +26,17 @@ func compute_progress(carPos):
 	var trace = $Track.curve
 	return trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
 
-func spawn_one_car(node):
-	var NN = FNNGEN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,true)
+func spawn_one_car(node,gene=null):
+	var NN = FNNGEN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,gene)
 	carsGameTree.append({"neuronNetwork":NN,"progress":0.0,"carNode":node})
+	
+func check_if_allDead():
+	var manualDrive=0 
+	if self.has_node("Car"):
+		manualDrive=1
+	var deadCars = filter(funcref(self,"filterDeadCars"),carsGameTree)
+	return deadCars.size() == (carsGameTree.size()-manualDrive)
+	
 #func set_camera_limits():
 #	var map_limits = $TileMap.get_used_rect()
 #	var map_cellsize = $TileMap.cell_size
@@ -36,26 +46,36 @@ func spawn_one_car(node):
 #	$CarTest/Camera2D.limit_bottom = map_limits.end.y * map_cellsize.y
 
 func _ready():
-	randomize()
+	generations=0
 	init_cars()
-
 	
-func init_cars():
+func init_cars(genes=[]):
+	var gene
+	carsGameTree=[]
+	randomize()
 	if self.has_node("Car"):
-		spawn_one_car(self.get_node("Car"))
+		spawn_one_car(self.get_node("Car"),null)
 	for i in range(population_size):
+		if i < genes.size():
+			gene = genes[i]
+		else:
+			gene = null
 		var spawnedCar = CAR.instance()
 		spawnedCar.position = Vector2(carX,carY)
 		spawnedCar.scale= Vector2(1,1)
 		spawnedCar.engine_power = engine_power
 		self.add_child(spawnedCar)
-		spawn_one_car(spawnedCar)
+		spawn_one_car(spawnedCar,gene)
 		
+	training=true
+	$CanvasLayer/ControlPanel/PanelContainer/VBoxContainer/Generation/generation.text=str(generations)
+	
 func _physics_process(delta):
 	filterCars()
 	set_camera()
 	collectingProbe()
 	paintCars()
+	checkIfEvolution()
 
 var COLOR_ARRAY=[Color.red,Color.green]
 # UI function
@@ -70,7 +90,8 @@ func paintCars():
 		else:
 			carsGameTree[counter].carNode.get_node('carSprite').self_modulate=Color.white
 		counter+=1
-
+		
+	
 # UI function : Filter out dead carsGameTree
 func filterCars():
 	var deadCars = []
@@ -101,42 +122,42 @@ func collectingProbe():
 			network.set_inputs(car.carNode.sensorDistances)
 			if network.activate_nn():
 					var command=network.get_outputs()
-					if command[0] > -25 && command[0] < 25:
+					if command[0] > -Global.VARIANCE*Global.RANGE && command[0] < Global.VARIANCE*Global.RANGE:
 						car.carNode.NN_turn=0
-					elif command[0] >=25:
+					elif command[0] >=Global.VARIANCE*Global.RANGE:
 						car.carNode.NN_turn=1
 					else:
 						car.carNode.NN_turn=-1
 					car.carNode.NN_gas=max(0.5,tanh(command[1])+1)
 
 
+func checkIfEvolution():
+	if !training: return;
+	var ifAllDead = check_if_allDead()
+	if ifAllDead:
+		print(carsGameTree[0].neuronNetwork.print_genes())
+		print(carsGameTree[1].neuronNetwork.print_genes())
+		generations+=1
+		$CanvasLayer/ControlPanel/PanelContainer/VBoxContainer/Generation/generation.text=str(generations)
+		training=false
+		
+		init_cars([])
+		
 # Signal listener
 
 # Print out and remove success car	
 func _on_DashLine_finished(target):
 	for i in carsGameTree.size():
 		if carsGameTree[i].get_name() == target.get_name():
-			self.remove_child(carsGameTree[i])
+#			self.remove_child(carsGameTree[i])
+			pass
 	print(target.get_name(),' just crossed the line!!!')
 
 # Spawning car when btn is pressed
 func _on_ControlPanel_carSpawning():
-	var manualDrive=0 
-	if self.has_node("Car"):
-		manualDrive=1
-	var deadCars = filter(funcref(self,"filterDeadCars"),carsGameTree)
-	if deadCars.size() == (carsGameTree.size()-manualDrive):
-		carsGameTree=[]
-		randomize()
-		if manualDrive:
-			spawn_one_car(self.get_node("Car"))
-		for i in range(population_size):
-			var spawnedCar = CAR.instance()
-			spawnedCar.position = Vector2(carX,carY)
-			spawnedCar.scale= Vector2(1,1)
-			spawnedCar.engine_power = engine_power
-			self.add_child(spawnedCar)
-			spawn_one_car(spawnedCar)
+	var ifAllDead = check_if_allDead()
+	if ifAllDead:
+		init_cars()
 	else:
 		print('not dead yet')
 

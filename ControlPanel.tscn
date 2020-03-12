@@ -64,7 +64,7 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 216.0
-margin_bottom = 65.0
+margin_bottom = 83.0
 
 [node name="CheckButton" type="CheckButton" parent="PanelContainer/VBoxContainer"]
 margin_right = 209.0
@@ -75,10 +75,34 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="Generation" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 margin_top = 44.0
 margin_right = 209.0
 margin_bottom = 58.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Generation"]
+margin_right = 88.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.427451, 0.447059, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+text = "Generation:"
+uppercase = true
+
+[node name="generation" type="Label" parent="PanelContainer/VBoxContainer/Generation"]
+margin_left = 92.0
+margin_right = 180.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.427451, 0.447059, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+text = "Generation:"
+uppercase = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+margin_top = 62.0
+margin_right = 209.0
+margin_bottom = 76.0
 grow_horizontal = 2
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
