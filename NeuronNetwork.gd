@@ -5,7 +5,6 @@ extends Node
 
 class Perceptron:
 	var bias
-	var ACTIVATE_FUNCTION = "tanh"
 	var weights=[]
 	func _init(prev_layer_nodes:int):
 		for _i in range(prev_layer_nodes):
@@ -78,7 +77,7 @@ class NeuronNetwork:
 				for node in Nlayer:
 					currentNode = currentLayer.perceptrons[ordinal]
 					currentNode.set_weights(node.weights)
-					currentNode.gene_mutate()
+#					currentNode.gene_mutate()
 					currentNode.generate_bias(node.bias)
 					ordinal+=1
 							

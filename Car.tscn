@@ -43,18 +43,3 @@ scale = Vector2( 5.77557, 5.55568 )
 [node name="Sensor5" parent="." instance=ExtResource( 3 )]
 position = Vector2( 5.83578, 25.2419 )
 scale = Vector2( 5.77557, 5.55568 )
-
-[node name="Sensor6" parent="." instance=ExtResource( 3 )]
-position = Vector2( -29.8406, 22.2898 )
-rotation = 0.785398
-scale = Vector2( 5.77557, 5.55568 )
-
-[node name="Sensor7" parent="." instance=ExtResource( 3 )]
-position = Vector2( -56.454, 0.443005 )
-rotation = 1.5708
-scale = Vector2( 5.77557, 5.55568 )
-
-[node name="Sensor8" parent="." instance=ExtResource( 3 )]
-position = Vector2( -31.4294, -22.9927 )
-rotation = 2.35619
-scale = Vector2( 5.77557, 5.55568 )

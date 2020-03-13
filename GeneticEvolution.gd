@@ -52,7 +52,7 @@ class GeneticEvolution:
 		var randChildIdx
 		var child
 		var weightSize
-		var NODES_TO_MUTATE=int(total_size/2)
+		var NODES_TO_MUTATE=1
 		var mutateCounter = 0
 		for sprout in range(sprouts):
 			if sprout< int(sprouts/2):

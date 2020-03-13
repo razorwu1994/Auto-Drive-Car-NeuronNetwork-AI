@@ -35,8 +35,8 @@ func _physics_process(delta):
 	else:
 		get_input()
 	apply_friction()
-	if !SELF_DRIVING:
-		calculate_steering(delta)
+#	if !SELF_DRIVING:
+	calculate_steering(delta)
 	velocity += acceleration * delta
 	velocity = move_and_slide(velocity)
 	for i in get_slide_count():
@@ -90,7 +90,7 @@ func on_collided(_body):
 			live=false
 
 func read_distances():
-	sensorDistances=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance,$Sensor6.globalDistance,$Sensor7.globalDistance,$Sensor8.globalDistance]
+	sensorDistances=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance]
 
 var NN_turn
 var NN_gas
@@ -114,18 +114,19 @@ func nn_input_directional():
 		steer_direction = turn * deg2rad(steering_angle)
 		acceleration = transform.x * engine_power * gas
 	else:
-#		if NN_turn>5000:
-#			steer_direction = 1 * deg2rad(steering_angle)
-#		elif NN_turn>0:
-#			steer_direction = 0 * deg2rad(steering_angle)
-#		else:
-#			steer_direction = -1 * deg2rad(steering_angle)
-#		print(steer_direction," ", NN_gas)
-		steer_direction =  deg2rad(NN_turn *steering_angle)
-		acceleration = transform.x * max(min(engine_power*abs(NN_gas),engine_power),300)
-#		else:
-#			acceleration = transform.x * braking
-		rotation=steer_direction
+		var temp = Vector2(NN_turn,NN_gas).normalized()
+		if temp.x>=.33:
+			steer_direction = 1 * deg2rad(steering_angle)
+		elif temp.x>=-.33:
+			steer_direction = 0 * deg2rad(steering_angle)
+		else:
+			steer_direction = -1 * deg2rad(steering_angle)
+		acceleration = transform.x * max(min(engine_power*abs(temp.y),engine_power),400)
+
+#		steer_direction =  deg2rad(temp.x *90)
+#		rotation=steer_direction
+
+		
 		
 
 

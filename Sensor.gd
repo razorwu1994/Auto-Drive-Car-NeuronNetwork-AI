@@ -2,7 +2,7 @@ extends Area2D
 var signRelativePos
 var start_point
 var end_point
-export (int) var sensorDistance = 70
+export (int) var sensorDistance = 200
 var offset=5
 var distanceScale
 var globalDistance=Global.SUPA_LARGE_VALUE

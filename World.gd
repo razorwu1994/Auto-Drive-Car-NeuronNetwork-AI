@@ -3,6 +3,7 @@ export (float) var carX = 400.092
 export (float) var carY = 2286
 export (int) var population_size = 20
 export (int) var engine_power = 2000
+var BEST_PROGRESS=0
 var CAR = load("Car.tscn")
 var carsGameTree
 var generations
@@ -74,7 +75,7 @@ func init_cars(genes=[]):
 	
 func _physics_process(_delta):
 	filterCars()
-	set_camera()
+#	set_camera()
 	collectingProbe()
 	paintCars()
 	checkIfEvolution()
@@ -82,22 +83,23 @@ func _physics_process(_delta):
 var COLOR_ARRAY=[Color.red,Color.green]
 # UI function
 func paintCars():
-	var customSorter = Global.CarProgressSorter.new()
-	carsGameTree.sort_custom(customSorter,'sort_descending')
-#	carsGameTree[0].carNode.get_node('Camera2D').current = true
-	$CanvasLayer/ControlPanel/Stats/ControlCenter/speed/stat.text= "%4.1f" % carsGameTree[0].carNode.velocity.length()
-	$CanvasLayer/ControlPanel/Stats/ControlCenter/turn/stat.text= "%1.4f degree" % (carsGameTree[0].carNode.rotation*180/PI)
-	
-	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
-	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
-#	print(carsGameTree[0].progress," ",carsGameTree[1].progress)
-	var counter = 0
-	while counter < carsGameTree.size():
-		if counter < 2:
-			carsGameTree[counter].carNode.get_node('carSprite').self_modulate=COLOR_ARRAY[counter]
-		else:
-			carsGameTree[counter].carNode.get_node('carSprite').self_modulate=Color.white
-		counter+=1
+	var liveCars = filter(funcref(self,"filterLiveCars"),carsGameTree)
+	liveCars.sort_custom(Global.CarProgressSorter,'sort_descending')
+	if liveCars.size()>0:
+		liveCars[0].carNode.get_node('Camera2D').current = true
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/speed/stat.text= "%4.1f" % liveCars[0].carNode.velocity.length()
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/turn/stat.text= "%1.4f degree" % (liveCars[0].carNode.rotation*180/PI)
+		
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % liveCars[0].progress)+"%"
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % liveCars[0].progress)+"%"
+	#	print(carsGameTree[0].progress," ",carsGameTree[1].progress)
+		var counter = 0
+		while counter < liveCars.size():
+			if counter < 2:
+				liveCars[counter].carNode.get_node('carSprite').self_modulate=COLOR_ARRAY[counter]
+			else:
+				liveCars[counter].carNode.get_node('carSprite').self_modulate=Color.white
+			counter+=1
 		
 	
 # UI function : Filter out dead carsGameTree
@@ -142,7 +144,8 @@ func checkIfEvolution():
 	var ifAllDead = check_if_allDead()
 	if ifAllDead:
 		training=false
-		print(carsGameTree[0].progress)
+		BEST_PROGRESS =  max(carsGameTree[0].progress,BEST_PROGRESS)
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/best/stat.text=str(BEST_PROGRESS)+"%"
 		var new_cars=[]
 		if population_size>1:
 			var geAlgo = GE.GeneticEvolution.new([carsGameTree[0].neuronNetwork.extract_genes(),carsGameTree[1].neuronNetwork.extract_genes()],Global.countNodeSize())
@@ -156,15 +159,17 @@ func checkIfEvolution():
 		init_cars(new_cars)
 		generations+=1
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
-		
+		goodBoys=0
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(goodBoys)
 # Signal listener
-
+var goodBoys=0
 # Print out and remove success car	
 func _on_DashLine_finished(target):
 	for i in carsGameTree.size():
 		if carsGameTree[i].carNode.get_name() == target.get_name():
-#			self.remove_child(carsGameTree[i])
-			pass
+#			carsGameTree[i].carNode.live = false
+			goodBoys+=1
+			$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(goodBoys)
 	print(target.get_name(),' just crossed the line!!!')
 
 # Spawning car when btn is pressed

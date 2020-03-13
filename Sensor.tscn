@@ -19,12 +19,12 @@ __meta__ = {
 
 [node name="Line2D" type="Line2D" parent="ObstacleSign"]
 position = Vector2( -2.27374e-13, -3.8147e-06 )
-points = PoolVector2Array( 0, 0, 0, 70 )
+points = PoolVector2Array( 0, 0, 0, 200 )
 width = 3.0
 default_color = Color( 0, 0.623529, 0.345098, 1 )
 
 [node name="Sign" type="Sprite" parent="ObstacleSign"]
 self_modulate = Color( 0, 0.623529, 0.345098, 1 )
-position = Vector2( 0, 70 )
+position = Vector2( 0, 200 )
 scale = Vector2( 0.02, 0.02 )
 texture = ExtResource( 3 )

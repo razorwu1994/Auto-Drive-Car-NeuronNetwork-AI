@@ -1,11 +1,11 @@
 extends Node
 
-var LAYERS_CONFIGURE=[8,6,4,2]
-var SUPA_LARGE_VALUE=100
+var LAYERS_CONFIGURE=[5,4,3,2]
+var SUPA_LARGE_VALUE=2000
 var SUPA_SMALL_VALUE=-99999999999999
-var LEARNING_RATE=0.8
+var LEARNING_RATE=20
 var VARIANCE= 5
-var MUTATOR = 5
+var MUTATOR = 0.5
 var MATH_E = 2.71828
 static func randomNumberFeeder(openNum,closeNum):
 	randomize()
