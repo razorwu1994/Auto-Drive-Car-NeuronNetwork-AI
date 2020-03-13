@@ -19,7 +19,7 @@ func _ready():
 	init_sensor()
 
 
-func _process(delta):
+func _process(_delta):
 	probe_obstacles()
 
 var SENSOR_TOLERANCE_OFFSET = 8

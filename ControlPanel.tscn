@@ -18,6 +18,7 @@ __meta__ = {
 }
 
 [node name="Panel" type="PanelContainer" parent="."]
+visible = false
 margin_right = 350.0
 margin_bottom = 267.0
 custom_styles/panel = SubResource( 1 )
@@ -52,21 +53,21 @@ text = "100"
 [node name="PanelContainer" type="PanelContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 352.238
-margin_top = -2.3327
-margin_right = 575.238
-margin_bottom = 69.6673
+margin_left = 466.321
+margin_top = 3.09558
+margin_right = 689.321
+margin_bottom = 57.0956
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="ControlCenter" type="VBoxContainer" parent="PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 216.0
-margin_bottom = 83.0
+margin_bottom = 47.0
 
-[node name="CheckButton" type="CheckButton" parent="PanelContainer/VBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="PanelContainer/ControlCenter"]
 margin_right = 209.0
 margin_bottom = 40.0
 pressed = true
@@ -75,12 +76,35 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Generation" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 44.0
-margin_right = 209.0
-margin_bottom = 58.0
+[node name="Stats" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 721.728
+margin_top = 1.29056
+margin_right = 1021.73
+margin_bottom = 109.291
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Generation"]
+[node name="ControlCenter" type="VBoxContainer" parent="Stats"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 293.0
+margin_bottom = 101.0
+
+[node name="Generation" type="HBoxContainer" parent="Stats/ControlCenter"]
+margin_right = 286.0
+margin_bottom = 14.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Stats/ControlCenter/Generation"]
+margin_right = 100.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Stats/ControlCenter/Generation/HBoxContainer"]
 margin_right = 88.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 0.427451, 0.447059, 1, 1 )
@@ -89,40 +113,130 @@ custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "Generation:"
 uppercase = true
 
-[node name="generation" type="Label" parent="PanelContainer/VBoxContainer/Generation"]
+[node name="generation" type="Label" parent="Stats/ControlCenter/Generation/HBoxContainer"]
 margin_left = 92.0
-margin_right = 180.0
+margin_right = 100.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 0.427451, 0.447059, 1, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
-text = "Generation:"
+text = "0"
 uppercase = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 62.0
-margin_right = 209.0
-margin_bottom = 76.0
+[node name="lives" type="HBoxContainer" parent="Stats/ControlCenter/Generation"]
+margin_left = 104.0
+margin_right = 183.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Stats/ControlCenter/Generation/lives"]
+margin_right = 67.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.419608, 0.419608, 0.419608, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+text = "Live Cars:"
+uppercase = true
+
+[node name="text" type="Label" parent="Stats/ControlCenter/Generation/lives"]
+margin_left = 71.0
+margin_right = 79.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.419608, 0.419608, 0.419608, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+text = "0"
+uppercase = true
+
+[node name="HB" type="HBoxContainer" parent="Stats/ControlCenter"]
+margin_top = 18.0
+margin_right = 286.0
+margin_bottom = 32.0
+
+[node name="first" type="HBoxContainer" parent="Stats/ControlCenter/HB"]
+margin_right = 101.0
+margin_bottom = 14.0
 grow_horizontal = 2
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
-margin_right = 104.0
+[node name="Label" type="Label" parent="Stats/ControlCenter/HB/first"]
+margin_right = 69.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 1, 0, 0, 1 )
-text = "Best Progress:"
+text = "1st place:"
 uppercase = true
 
-[node name="bestProgress" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 108.0
-margin_right = 136.0
+[node name="progress" type="Label" parent="Stats/ControlCenter/HB/first"]
+margin_left = 73.0
+margin_right = 101.0
 margin_bottom = 14.0
 text = "10%"
 
+[node name="second" type="HBoxContainer" parent="Stats/ControlCenter/HB"]
+margin_left = 105.0
+margin_right = 212.0
+margin_bottom = 14.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="Stats/ControlCenter/HB/second"]
+margin_right = 75.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 1, 0.345098, 1 )
+text = "2nd place:"
+uppercase = true
+
+[node name="progress" type="Label" parent="Stats/ControlCenter/HB/second"]
+margin_left = 79.0
+margin_right = 107.0
+margin_bottom = 14.0
+text = "10%"
+
+[node name="speed" type="HBoxContainer" parent="Stats/ControlCenter"]
+margin_top = 36.0
+margin_right = 286.0
+margin_bottom = 50.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="Stats/ControlCenter/speed"]
+margin_right = 51.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 0.607843, 0, 1 )
+text = "Speed : "
+uppercase = true
+
+[node name="stat" type="Label" parent="Stats/ControlCenter/speed"]
+margin_left = 55.0
+margin_right = 83.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 0.607843, 0, 1 )
+text = "10%"
+
+[node name="turn" type="HBoxContainer" parent="Stats/ControlCenter"]
+margin_top = 54.0
+margin_right = 286.0
+margin_bottom = 68.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="Stats/ControlCenter/turn"]
+margin_right = 47.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0.505882, 1, 1 )
+text = "TURN : "
+uppercase = true
+
+[node name="stat" type="Label" parent="Stats/ControlCenter/turn"]
+margin_left = 51.0
+margin_right = 79.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0.505882, 1, 1 )
+text = "10%"
+
 [node name="CarGenerator" type="PanelContainer" parent="."]
-margin_left = 574.213
-margin_top = 0.859406
-margin_right = 652.213
-margin_bottom = 78.8594
+margin_left = 351.629
+margin_top = 3.12229
+margin_right = 429.629
+margin_bottom = 81.1223
 __meta__ = {
 "_edit_use_anchors_": false
 }

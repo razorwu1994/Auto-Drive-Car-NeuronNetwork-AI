@@ -1,6 +1,6 @@
 extends Node2D
-export (float) var carX = 806.06
-export (float) var carY = 123
+export (float) var carX = 400.092
+export (float) var carY = 2286
 export (int) var population_size = 20
 export (int) var engine_power = 2000
 var CAR = load("Car.tscn")
@@ -27,8 +27,8 @@ func compute_progress(carPos):
 	return trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
 
 func spawn_one_car(node,gene=null):
-	var NN = FNNGEN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,gene)
-	carsGameTree.append({"neuronNetwork":NN,"progress":0.0,"carNode":node})
+	var network = NN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,gene)
+	carsGameTree.append({"neuronNetwork":network,"progress":0.0,"carNode":node})
 	
 func check_if_allDead():
 	var manualDrive=0 
@@ -48,11 +48,13 @@ func check_if_allDead():
 func _ready():
 	generations=0
 	init_cars()
+	if self.has_node("Car"):
+		if self.get_node("Car").SELF_DRIVING:
+			$CanvasLayer/ControlPanel/PanelContainer/ControlCenter/CheckButton.pressed=false
 	
 func init_cars(genes=[]):
 	var gene
 	carsGameTree=[]
-	randomize()
 	if self.has_node("Car"):
 		spawn_one_car(self.get_node("Car"),null)
 	for i in range(population_size):
@@ -68,9 +70,9 @@ func init_cars(genes=[]):
 		spawn_one_car(spawnedCar,gene)
 		
 	training=true
-	$CanvasLayer/ControlPanel/PanelContainer/VBoxContainer/Generation/generation.text=str(generations)
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	filterCars()
 	set_camera()
 	collectingProbe()
@@ -82,7 +84,13 @@ var COLOR_ARRAY=[Color.red,Color.green]
 func paintCars():
 	var customSorter = Global.CarProgressSorter.new()
 	carsGameTree.sort_custom(customSorter,'sort_descending')
-	$CanvasLayer/ControlPanel/PanelContainer/VBoxContainer/HBoxContainer/bestProgress.text= str(carsGameTree[0].progress)+"%"
+#	carsGameTree[0].carNode.get_node('Camera2D').current = true
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/speed/stat.text= "%4.1f" % carsGameTree[0].carNode.velocity.length()
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/turn/stat.text= "%1.4f degree" % (carsGameTree[0].carNode.rotation*180/PI)
+	
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
+#	print(carsGameTree[0].progress," ",carsGameTree[1].progress)
 	var counter = 0
 	while counter < carsGameTree.size():
 		if counter < 2:
@@ -94,16 +102,18 @@ func paintCars():
 	
 # UI function : Filter out dead carsGameTree
 func filterCars():
-	var deadCars = []
-	var i= 0
+	var _i= 0
+	var lives = 0
 	for car in carsGameTree:
 		car.progress=compute_progress(car.carNode.position)*100
-		i += 1
+		_i += 1
 		var isDead = !car.carNode.live
 		if isDead:
 			if car.carNode.is_inside_tree():
 				self.remove_child(car.carNode)	
-	
+		else:
+			lives+=1
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/lives/text.text=str(lives)
 # UI function: Active camera for player(priority) or random self driving car
 func set_camera():
 	for child in self.get_children():
@@ -121,34 +131,38 @@ func collectingProbe():
 			network=car.neuronNetwork
 			network.set_inputs(car.carNode.sensorDistances)
 			if network.activate_nn():
-					var command=network.get_outputs()
-					if command[0] > -Global.VARIANCE*Global.RANGE && command[0] < Global.VARIANCE*Global.RANGE:
-						car.carNode.NN_turn=0
-					elif command[0] >=Global.VARIANCE*Global.RANGE:
-						car.carNode.NN_turn=1
-					else:
-						car.carNode.NN_turn=-1
-					car.carNode.NN_gas=max(0.5,tanh(command[1])+1)
+					var command=network.get_outputs()	
+#					print(car.carNode.sensorDistances, " comand is ",command)	
+					car.carNode.NN_turn=command[0]/100000
+					car.carNode.NN_gas=command[1]/50000
 
-
+# Functional function : Select 2 best performance parents and give birth to children
 func checkIfEvolution():
 	if !training: return;
 	var ifAllDead = check_if_allDead()
 	if ifAllDead:
-		print(carsGameTree[0].neuronNetwork.print_genes())
-		print(carsGameTree[1].neuronNetwork.print_genes())
-		generations+=1
-		$CanvasLayer/ControlPanel/PanelContainer/VBoxContainer/Generation/generation.text=str(generations)
 		training=false
-		
-		init_cars([])
+		print(carsGameTree[0].progress)
+		var new_cars=[]
+		if population_size>1:
+			var geAlgo = GE.GeneticEvolution.new([carsGameTree[0].neuronNetwork.extract_genes(),carsGameTree[1].neuronNetwork.extract_genes()],Global.countNodeSize())
+			var children_genes = []
+			if geAlgo.CROSS_OVER():
+				children_genes=geAlgo.MUTATION(population_size)
+			var new_gene=[]
+			for gene in children_genes:
+				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
+				new_cars.append(new_gene)
+		init_cars(new_cars)
+		generations+=1
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
 		
 # Signal listener
 
 # Print out and remove success car	
 func _on_DashLine_finished(target):
 	for i in carsGameTree.size():
-		if carsGameTree[i].get_name() == target.get_name():
+		if carsGameTree[i].carNode.get_name() == target.get_name():
 #			self.remove_child(carsGameTree[i])
 			pass
 	print(target.get_name(),' just crossed the line!!!')

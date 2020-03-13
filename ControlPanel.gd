@@ -39,8 +39,8 @@ func _input(event):
 	if event.is_action_pressed("ui_focus_next"):
 		visible = !visible
 
-func _process(delta):
-	if !$PanelContainer/VBoxContainer/CheckButton.pressed:
+func _process(_delta):
+	if !$PanelContainer/ControlCenter/CheckButton.pressed:
 		$Panel.visible=false
 	else:
 		$Panel.visible=true

@@ -30,11 +30,13 @@ func _physics_process(delta):
 	read_distances()
 	acceleration = Vector2.ZERO
 	if SELF_DRIVING:
-		nn_input_noReverse()
+#		nn_input_noReverse()
+		nn_input_directional()
 	else:
 		get_input()
 	apply_friction()
-	calculate_steering(delta)
+	if !SELF_DRIVING:
+		calculate_steering(delta)
 	velocity += acceleration * delta
 	velocity = move_and_slide(velocity)
 	for i in get_slide_count():
@@ -81,14 +83,14 @@ var lastTurnTime=0.0
 var lastGasTime=0.0
 var lastTurn=rand_range(-1,1)
 
-func on_collided(body):
+func on_collided(_body):
 	if live:
 #		print(self.get_name(),' 报废一辆')
 		if SELF_DRIVING:
 			live=false
 
 func read_distances():
-	sensorDistances=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance]
+	sensorDistances=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance,$Sensor6.globalDistance,$Sensor7.globalDistance,$Sensor8.globalDistance]
 
 var NN_turn
 var NN_gas
@@ -100,7 +102,30 @@ func nn_input_noReverse():
 		acceleration = transform.x * engine_power * gas
 	else:
 		steer_direction = NN_turn * deg2rad(steering_angle)
-		acceleration = transform.x * engine_power * NN_gas
+		if NN_gas>0.5:
+			acceleration = transform.x * engine_power
+		else:
+			acceleration = transform.x * braking 
+
+func nn_input_directional():
+	if !NN_turn:
+		var turn = randi()  % 3 - 1 
+		var gas =rand_range(0,1)+0.5
+		steer_direction = turn * deg2rad(steering_angle)
+		acceleration = transform.x * engine_power * gas
+	else:
+#		if NN_turn>5000:
+#			steer_direction = 1 * deg2rad(steering_angle)
+#		elif NN_turn>0:
+#			steer_direction = 0 * deg2rad(steering_angle)
+#		else:
+#			steer_direction = -1 * deg2rad(steering_angle)
+#		print(steer_direction," ", NN_gas)
+		steer_direction =  deg2rad(NN_turn *steering_angle)
+		acceleration = transform.x * max(min(engine_power*abs(NN_gas),engine_power),300)
+#		else:
+#			acceleration = transform.x * braking
+		rotation=steer_direction
 		
 
 
