@@ -8,4 +8,4 @@ show_behind_parent = true
 rotation = 1.5708
 texture = SubResource( 1 )
 region_enabled = true
-region_rect = Rect2( 363.23, -0.893287, 71.0795, 133.893 )
+region_rect = Rect2( 363.23, -0.893287, 71.0795, 128.893 )

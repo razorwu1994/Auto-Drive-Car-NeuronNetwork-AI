@@ -2,6 +2,8 @@ extends Node
 
 
 class GeneticEvolution:
+	var PROB_CROSS = 0.4
+	var PROB_MUTATE = 0.1
 	var NUM_OF_NODES=2
 	var selectionParents=[]
 	var crossoverChildren=[]
@@ -37,55 +39,51 @@ class GeneticEvolution:
 #
 #			crossoverChildren[cO]= Global.flatArrayOneDepth(crossoverChildren[cO])
 		
-		var c1 = Global.flatArrayOneDepth([selectionParents[0].slice(0,7),selectionParents[1].slice(8,13),selectionParents[1].slice(14,17),selectionParents[0].slice(18,19)])
-		crossoverChildren.append(c1)
+		# 8 sensors
+#		var c1 = Global.flatArrayOneDepth([selectionParents[0].slice(0,7),selectionParents[1].slice(8,13),selectionParents[1].slice(14,17),selectionParents[0].slice(18,19)])
+#		var c2 = Global.flatArrayOneDepth([selectionParents[1].slice(0,7),selectionParents[0].slice(8,13),selectionParents[0].slice(14,17),selectionParents[1].slice(18,19)])
+#		
+		# 5 sensors
+#		var c1 = Global.flatArrayOneDepth([selectionParents[0].slice(0,9),selectionParents[1].slice(10,13)])
+#		var c2 = Global.flatArrayOneDepth([selectionParents[0].slice(0,3),selectionParents[1].slice(4,13)])
+		var bestChild =  selectionParents[0]
+		var betterChild = selectionParents[1]
 		
-		var c2 = Global.flatArrayOneDepth([selectionParents[1].slice(0,7),selectionParents[0].slice(8,13),selectionParents[0].slice(14,17),selectionParents[1].slice(18,19)])
-		crossoverChildren.append(c2)
-			
+		var bestSprout=[]
+
+		var childIdx = 0
+		for bestChildnode in bestChild:
+			randomize()
+			if rand_range(0,1) > PROB_CROSS:
+				bestSprout.append(bestChildnode)
+			else:
+				bestSprout.append(betterChild[childIdx])
+			childIdx+=1
+		crossoverChildren.append(bestSprout)
 		return true
 	
 	func MUTATION(sprouts):
-		if crossoverChildren.size() != NUM_OF_NODES:
-			return []
 		var ret_children=[]
-		var randChildIdx
-		var child
+		var randWeightIdx
+		var child = Array(crossoverChildren[0])
 		var weightSize
-		var NODES_TO_MUTATE=1
-		var mutateCounter = 0
+		var GENES_TO_MUTATE=3
+#		=int(crossoverChildren[0].size()/3)
+		var weightMutateCounter = 0
 		for sprout in range(sprouts):
-			if sprout< int(sprouts/2):
-				child = Array(crossoverChildren[0])
-			else:
-				child = Array(crossoverChildren[1])
-			while mutateCounter < NODES_TO_MUTATE:
+			for perceptron in child:
 				randomize()
-				randChildIdx = randi() % child.size()
-				weightSize = child[randChildIdx].weights.size()
-				for i in range(weightSize):
-					randomize()
-					child[randChildIdx].weights[i]+= rand_range(-Global.MUTATOR,Global.MUTATOR)
-				child[randChildIdx].bias += (randi()%3-1)*Global.MUTATOR
-				ret_children.append(child)
-				mutateCounter+=1
+				if rand_range(0,1) > PROB_MUTATE:
+					pass
+				else:	
+					weightSize = perceptron.weights.size()
+					weightMutateCounter=0
+					while weightMutateCounter < GENES_TO_MUTATE:
+						randomize()
+						randWeightIdx = randi() % weightSize
+						perceptron.weights[randWeightIdx]+= Global.generateRandom()
+						weightMutateCounter+=1
+					perceptron.bias += Global.generateRandom()
+			ret_children.append(child)
 		return ret_children
 		
-	
-	
-#	func PRODUCE(sprouts):
-#		var children = []
-#		var currentChild
-#		for i in int(sprouts/2):
-#			currentChild = Array(crossoverChildren[0])
-#			for node in currentChild:
-#				randomize()
-#				node.bias += (randi()%3-1)*Global.MUTATOR
-#			children.append(currentChild)
-#		for i in (sprouts-int(sprouts/2)):
-#			currentChild =Array(crossoverChildren[1])
-#			for node in currentChild:
-#				randomize()
-#				node.bias += (randi()%3-1)*Global.MUTATOR
-#			children.append(currentChild)
-#		return children

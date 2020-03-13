@@ -1,15 +1,13 @@
 extends Node
 
-var LAYERS_CONFIGURE=[8,6,4,2]
-var SUPA_LARGE_VALUE=2000
+var LAYERS_CONFIGURE=[5,4,3,2]  #[8,6,4,2] 
+var SUPA_LARGE_VALUE=250 
 var SUPA_SMALL_VALUE=-99999999999999
-var INTELLIGENCE=20
-var VARIANCE= 5
+var INTELLIGENCE=1#8: 5; 5 :20
+var VARIANCE= 0.5
 var MUTATOR = 0.5
 var MATH_E = 2.71828
-static func randomNumberFeeder(openNum,closeNum):
-	randomize()
-	return rand_range(openNum,closeNum)
+
 
 func countNodeSize():
 	var sum=0
@@ -18,6 +16,8 @@ func countNodeSize():
 	return sum
 class CarProgressSorter:
 	static func sort_descending(a, b):
+		if !a.carNode.SELF_DRIVING:
+			return false
 		if a.progress > b.progress:
 			return true
 		return false
@@ -45,6 +45,23 @@ func translate_genes(gene:Array,layersConfig):
 		return _NN	
 
 
-func sigmoid(t):
-	return 1/(1+pow(MATH_E,-1))
+func revised_sigmoid(t):
+	var RANGE_ADJUST = 0.5
+	var thick_boi = 1/(1+float(pow(MATH_E,-t)))-RANGE_ADJUST
+	if thick_boi == 0:
+		randomize()
+		var rand = randi()%2
+		if rand == 0:
+			thick_boi += MUTATOR * 1
+		else:
+			thick_boi += MUTATOR * -1
+	return float("%2.30f" % thick_boi)
 
+func sigmoid(t):
+	return 1/(1+float(pow(MATH_E,-t)))
+
+var MIN_RAND = 0.1
+func generateRandom():
+	randomize()
+	var rand = rand_range(-MUTATOR,MUTATOR)
+	return max(abs(rand),MIN_RAND)*sign(rand)

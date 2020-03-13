@@ -117,17 +117,35 @@ func nn_input_directional():
 		steer_direction = turn * deg2rad(steering_angle)
 		acceleration = transform.x * engine_power * gas
 	else:
+#		print(NN_turn)
 		var temp = Vector2(NN_turn,NN_gas).normalized()
+#		print("turn ",NN_turn," VS. ",temp.x)
+#		print("gas ",NN_gas," VS. ",temp.y)
 		if temp.x>=.33:
 			steer_direction = 1 * deg2rad(steering_angle)
 		elif temp.x>=-.33:
 			steer_direction = 0 * deg2rad(steering_angle)
 		else:
 			steer_direction = -1 * deg2rad(steering_angle)
-		acceleration = transform.x * max(min(engine_power*abs(temp.y),engine_power),300)
+		
+		if abs(engine_power*temp.y)<280:
+			acceleration = transform.x*280*abs(sign(temp.y))
+		elif abs(engine_power*temp.y)<280:
+			acceleration = transform.x*280*abs(sign(temp.y))
+		elif abs(engine_power*temp.y)>2000:
+			acceleration = transform.x*2000*abs(sign(temp.y))
+		else:
+			acceleration = transform.x * abs(engine_power*temp.y)
 
 #		steer_direction =  deg2rad(temp.x *90)
 #		rotation=steer_direction
+
+#		if abs(engine_power*temp.y)<800:
+#			acceleration = transform.x*800*sign(temp.y)
+#		elif abs(engine_power*temp.y)>2000:
+#			acceleration = transform.x*2000*sign(temp.y)
+#		else:
+#			acceleration = transform.x * engine_power*temp.y
 
 		
 		

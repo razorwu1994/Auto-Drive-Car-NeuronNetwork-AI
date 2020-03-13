@@ -90,7 +90,7 @@ __meta__ = {
 [node name="ControlCenter" type="VBoxContainer" parent="Stats"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 293.0
+margin_right = 293.002
 margin_bottom = 111.0
 
 [node name="Generation" type="HBoxContainer" parent="Stats/ControlCenter"]
@@ -239,15 +239,15 @@ margin_bottom = 86.0
 grow_horizontal = 2
 
 [node name="Label" type="Label" parent="Stats/ControlCenter/best"]
-margin_right = 42.0
+margin_right = 76.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 1, 0, 0.890196, 1 )
-text = "BEST : "
+text = "LAST BEST : "
 uppercase = true
 
 [node name="stat" type="Label" parent="Stats/ControlCenter/best"]
-margin_left = 46.0
-margin_right = 66.0
+margin_left = 80.0
+margin_right = 100.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 1, 0, 0.890196, 1 )
 text = "0%"

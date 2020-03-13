@@ -79,6 +79,8 @@ func _physics_process(_delta):
 	collectingProbe()
 	paintCars()
 	checkIfEvolution()
+#	if BEST_BOI !=null:
+#		print(BEST_BOI.neuronNetwork.extract_genes()[0].weights)
 
 var COLOR_ARRAY=[Color.red,Color.green]
 # UI function
@@ -136,9 +138,24 @@ func collectingProbe():
 			if network.activate_nn():
 					var command=network.get_outputs()	
 #					print(car.carNode.sensorDistances, " comand is ",command)	
-					car.carNode.NN_turn=command[0]/100000
-					car.carNode.NN_gas=command[1]/50000
+					car.carNode.NN_turn=command[0]
+					car.carNode.NN_gas=command[1]
 
+var BEST_BOI
+var BETTER_BOI
+func boiDeterminator():
+	if BEST_BOI == null:
+		BEST_BOI = carsGameTree[0]
+	else:
+		if carsGameTree[0].progress > BEST_BOI.progress:
+			BEST_BOI = carsGameTree[0]
+	if BETTER_BOI == null:
+		BETTER_BOI = carsGameTree[1]
+	else:
+		if carsGameTree[0].progress > BETTER_BOI.progress:
+			BETTER_BOI = carsGameTree[0]
+		elif carsGameTree[1].progress > BETTER_BOI.progress:
+			BETTER_BOI = carsGameTree[1]
 # Functional function : Select 2 best performance parents and give birth to children
 func checkIfEvolution():
 	if !training: return;
@@ -146,11 +163,14 @@ func checkIfEvolution():
 	if ifAllDead:
 		training=false
 		carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
-		BEST_PROGRESS =  max(carsGameTree[0].progress,BEST_PROGRESS)
+#		print(carsGameTree[0].progress,carsGameTree[1].progress)
+		boiDeterminator()
+		BEST_PROGRESS =  BEST_BOI.progress
+
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/best/stat.text=str(BEST_PROGRESS)+"%"
 		var new_cars=[]
 		if population_size>1:
-			var geAlgo = GE.GeneticEvolution.new([carsGameTree[0].neuronNetwork.extract_genes(),carsGameTree[1].neuronNetwork.extract_genes()],Global.countNodeSize())
+			var geAlgo = GE.GeneticEvolution.new([BEST_BOI.neuronNetwork.extract_genes(),BETTER_BOI.neuronNetwork.extract_genes()],Global.countNodeSize())
 			var children_genes = []
 			if geAlgo.CROSS_OVER():
 				children_genes=geAlgo.MUTATION(population_size)
@@ -159,11 +179,13 @@ func checkIfEvolution():
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
 				new_cars.append(new_gene)
 		init_cars(new_cars)
+#		print(carsGameTree[0].neuronNetwork.extract_genes())
 		generations+=1
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
 		lastBoys=goodBoys
 		goodBoys=0
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(lastBoys)
+		print("last run ",lastBoys)
 # Signal listener
 var goodBoys=0
 var lastBoys=0
@@ -178,10 +200,15 @@ func _on_DashLine_finished(target):
 
 # Spawning car when btn is pressed
 func _on_ControlPanel_carSpawning():
-	var ifAllDead = check_if_allDead()
-	if ifAllDead:
-		init_cars()
-	else:
-		print('not dead yet')
+	var liveCars = filter(funcref(self,"filterLiveCars"),carsGameTree)
+	for car in liveCars:
+		car.carNode.live=false
+		self.remove_child(car.carNode)
+	checkIfEvolution()
+##	var ifAllDead = check_if_allDead()
+##	if ifAllDead:
+##		init_cars()
+#	else:
+#		print('not dead yet')
 
 

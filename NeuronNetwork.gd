@@ -8,22 +8,20 @@ class Perceptron:
 	var weights=[]
 	func _init(prev_layer_nodes:int):
 		for _i in range(prev_layer_nodes):
-			self.weights.append(Global.randomNumberFeeder(-Global.VARIANCE,Global.VARIANCE))
-		self.bias= Global.randomNumberFeeder(-Global.MUTATOR,Global.MUTATOR)
-		gene_mutate()
-		
+			weights.append(Global.generateRandom())
+		bias=Global.generateRandom()
+
 	func activate(inputs):
 		var output = 0
 		for i in inputs.size():
 			output+=weights[i]*inputs[i]*Global.INTELLIGENCE
-		output = output +bias
+		output = 1/Global.revised_sigmoid(output+bias) 
+#		output +=bias
+#		output +=Global.sigmoid(output)-0.5+bias
+#		output = tanh(output+bias)
+#		print(inputs," ",output)
 		return output 
-	
-	func gene_mutate():
-		randomize()
-		for weight in weights:
-			weight += rand_range(-Global.MUTATOR,Global.MUTATOR)
-		pass
+
 	func generate_bias(_bias):
 		bias=_bias
 	
@@ -77,10 +75,8 @@ class NeuronNetwork:
 				for node in Nlayer:
 					currentNode = currentLayer.perceptrons[ordinal]
 					currentNode.set_weights(node.weights)
-#					currentNode.gene_mutate()
 					currentNode.generate_bias(node.bias)
 					ordinal+=1
-							
 	func extract_genes():
 		var genes=[]
 		for Nlayer in NN:
@@ -115,6 +111,8 @@ class NeuronNetwork:
 					
 			outputs = currentLayer.analyze(inputs)
 		last_layer_outputs=outputs
+		if outputs[0]>1000000:
+			print()
 #		print("in ",first_layer_inputs)
 #		print("out ",last_layer_outputs)
 		return true
