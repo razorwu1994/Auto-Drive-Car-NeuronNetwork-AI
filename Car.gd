@@ -90,7 +90,10 @@ func on_collided(_body):
 			live=false
 
 func read_distances():
-	sensorDistances=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance]
+	sensorDistances=[]
+	for i in Global.LAYERS_CONFIGURE[0]:
+		sensorDistances.append(get_node("Sensor"+str(i)).globalDistance)	
+#	=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance]
 
 var NN_turn
 var NN_gas
@@ -121,7 +124,7 @@ func nn_input_directional():
 			steer_direction = 0 * deg2rad(steering_angle)
 		else:
 			steer_direction = -1 * deg2rad(steering_angle)
-		acceleration = transform.x * max(min(engine_power*abs(temp.y),engine_power),400)
+		acceleration = transform.x * max(min(engine_power*abs(temp.y),engine_power),300)
 
 #		steer_direction =  deg2rad(temp.x *90)
 #		rotation=steer_direction

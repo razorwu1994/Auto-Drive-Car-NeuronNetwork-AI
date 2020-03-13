@@ -15,7 +15,7 @@ class Perceptron:
 	func activate(inputs):
 		var output = 0
 		for i in inputs.size():
-			output+=weights[i]*inputs[i]*Global.LEARNING_RATE
+			output+=weights[i]*inputs[i]*Global.INTELLIGENCE
 		output = output +bias
 		return output 
 	

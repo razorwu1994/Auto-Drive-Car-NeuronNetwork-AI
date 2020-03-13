@@ -24,7 +24,7 @@ func filterNotSUPALARGEValues(item):
 	return item<Global.SUPA_LARGE_VALUE 
 	
 func compute_progress(carPos):
-	var trace = $Track.curve
+	var trace = $GoodBoiGuideLine.curve
 	return trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
 
 func spawn_one_car(node,gene=null):
@@ -83,6 +83,9 @@ func _physics_process(_delta):
 var COLOR_ARRAY=[Color.red,Color.green]
 # UI function
 func paintCars():
+	carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % carsGameTree[1].progress)+"%"
 	var liveCars = filter(funcref(self,"filterLiveCars"),carsGameTree)
 	liveCars.sort_custom(Global.CarProgressSorter,'sort_descending')
 	if liveCars.size()>0:
@@ -90,8 +93,6 @@ func paintCars():
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/speed/stat.text= "%4.1f" % liveCars[0].carNode.velocity.length()
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/turn/stat.text= "%1.4f degree" % (liveCars[0].carNode.rotation*180/PI)
 		
-		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % liveCars[0].progress)+"%"
-		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % liveCars[0].progress)+"%"
 	#	print(carsGameTree[0].progress," ",carsGameTree[1].progress)
 		var counter = 0
 		while counter < liveCars.size():
@@ -144,6 +145,7 @@ func checkIfEvolution():
 	var ifAllDead = check_if_allDead()
 	if ifAllDead:
 		training=false
+		carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
 		BEST_PROGRESS =  max(carsGameTree[0].progress,BEST_PROGRESS)
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/best/stat.text=str(BEST_PROGRESS)+"%"
 		var new_cars=[]
@@ -159,10 +161,12 @@ func checkIfEvolution():
 		init_cars(new_cars)
 		generations+=1
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
+		lastBoys=goodBoys
 		goodBoys=0
-		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(goodBoys)
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(lastBoys)
 # Signal listener
 var goodBoys=0
+var lastBoys=0
 # Print out and remove success car	
 func _on_DashLine_finished(target):
 	for i in carsGameTree.size():
@@ -170,7 +174,7 @@ func _on_DashLine_finished(target):
 #			carsGameTree[i].carNode.live = false
 			goodBoys+=1
 			$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(goodBoys)
-	print(target.get_name(),' just crossed the line!!!')
+#	print(target.get_name(),' just crossed the line!!!')
 
 # Spawning car when btn is pressed
 func _on_ControlPanel_carSpawning():
