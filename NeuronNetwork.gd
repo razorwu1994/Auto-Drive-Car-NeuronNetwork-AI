@@ -19,7 +19,6 @@ class Perceptron:
 #		output +=bias
 #		output +=Global.sigmoid(output)-0.5+bias
 		output = tanh(output+bias)
-#		print(inputs," ",output)
 		return output 
 
 	func generate_bias(_bias):

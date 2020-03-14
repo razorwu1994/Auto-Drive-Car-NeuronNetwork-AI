@@ -25,7 +25,7 @@ func _process(_delta):
 func probe_obstacles():
 	var space_state = get_world_2d().direct_space_state
 	start_point=self.global_position
-	if (int($ObstacleSign/Sign.global_position.distance_to(start_point)/distanceScale))>=sensorDistance+Global.SENSOR_RAYCAST_OFFSET:
+	if (int($ObstacleSign/Sign.global_position.distance_to(start_point)/distanceScale))>=sensorDistance+Global.SENSOR_SAFE_DISTANCE:
 		$ObstacleSign/Sign.position=signRelativePos
 
 	end_point=$ObstacleSign/Sign.global_position

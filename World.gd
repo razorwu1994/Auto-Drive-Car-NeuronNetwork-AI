@@ -188,10 +188,10 @@ func boiDeterminator():
 	if carsGameTree.size() > 0:
 		if BEST_BOI == null:
 			BEST_BOI = carsGameTree[0]
-			print("NEW BEST BOIIIII")
+			print("NEW BEST BOIIIII ",BEST_BOI.progress)
 		elif carsGameTree[0].progress > (BEST_BOI.progress-variator):
 			BEST_BOI = carsGameTree[0]
-			print("NEW BEST BOIIIII")
+			print("NEW BEST BOIIIII ",BEST_BOI.progress)
 	
 	if carsGameTree.size() > 1:
 		if BETTER_BOI == null:
@@ -225,7 +225,7 @@ func checkIfEvolution():
 			else:
 				cross_variance=0
 			if geAlgo.CROSS_OVER(cross_variance):
-				children_genes=geAlgo.MUTATION(population_size,0,Global.MAX_FIT/BEST_BOI.progress)
+				children_genes=geAlgo.MUTATION(population_size,0,int(Global.MAX_FIT/BEST_BOI.progress))
 			var new_gene=[]
 			for gene in children_genes:
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
@@ -239,6 +239,8 @@ func checkIfEvolution():
 		goodBoys=0
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(lastBoys)
 #		print("last run ",lastBoys)
+
+
 # Signal listener
 var goodBoys=0
 var lastBoys=0
@@ -280,3 +282,14 @@ func _on_ControlPanel_discardBestBoi():
 	BETTER_BOI=null
 	BEST_PROGRESS=0
 	$CanvasLayer/ControlPanel/Stats/ControlCenter/best/stat.text="N/A%"
+
+
+func _on_ControlPanel_useChampionBoi():
+	var liveCars = filter(funcref(self,"filterLiveCars"),carsGameTree)
+	for car in liveCars:
+		car.carNode.live=false
+		self.remove_child(car.carNode)
+	var genes = []
+	for _p in range(population_size):
+		genes.append(Global.translate_genes(Global.CHAMPION_BOI,Global.LAYERS_CONFIGURE))
+	init_cars(genes)

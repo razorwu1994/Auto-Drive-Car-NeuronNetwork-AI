@@ -2,6 +2,7 @@ extends Control
 signal carSpawning
 signal printBestNN
 signal discardBestBoi
+signal useChampionBoi
 export (NodePath) var player_path
 var SettingSlider = preload("res://SettingSlider.tscn")
 var player = null
@@ -58,3 +59,7 @@ func _on_PrintButton_pressed():
 
 func _on_ClearButton_pressed():
 	emit_signal("discardBestBoi")
+
+
+func _on_UseChampionBoi_pressed():
+	emit_signal("useChampionBoi") 

@@ -2,10 +2,10 @@ extends Node
 
 
 class GeneticEvolution:
+	var NUM_OF_NODES=2 # Don't change this
 	var PROB_CROSS = 0.3
 	var PROB_MUTATE = 0.1
 	var GENES_TO_MUTATE=2
-	var NUM_OF_NODES=2 # Don't change this
 	var selectionParents=[]
 	var crossoverChildren=[]
 	var total_size
