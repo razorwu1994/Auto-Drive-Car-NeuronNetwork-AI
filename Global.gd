@@ -65,3 +65,11 @@ func generateRandom():
 	randomize()
 	var rand = rand_range(-MUTATOR,MUTATOR)
 	return max(abs(rand),MIN_RAND)*sign(rand)
+
+func printToFile(data,path):
+	var file = File.new()
+	if file.open("user://"+path, File.WRITE) != 0:
+		print("Error opening file")
+		return
+	file.store_line(to_json(data))
+	file.close()

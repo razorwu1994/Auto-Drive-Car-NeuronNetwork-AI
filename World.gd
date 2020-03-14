@@ -198,9 +198,13 @@ func checkIfEvolution():
 			if geAlgo.CROSS_OVER():
 				children_genes=geAlgo.MUTATION(population_size)
 			var new_gene=[]
+			var i = 0
 			for gene in children_genes:
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
 				new_cars.append(new_gene)
+				Global.printToFile(gene,"test"+str(i)+"_"+Global.BEST_BOI_FPATH)
+				i+=1
+
 		init_cars(new_cars)
 #		print(carsGameTree[0].neuronNetwork.extract_genes())
 		generations+=1
@@ -235,13 +239,16 @@ func _on_ControlPanel_carSpawning():
 #		print('not dead yet')
 
 func _on_ControlPanel_printBestNN():
-	carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
-	boiDeterminator()
-	# Open a file
-	var file = File.new()
-	if file.open("user://"+Global.BEST_BOI_FPATH, File.WRITE) != 0:
-		print("Error opening file")
-		return
-	file.store_line(to_json(BEST_BOI.neuronNetwork.extract_genes()))
-	file.close()
-	print("File saved in "+Global.BEST_BOI_FPATH)
+	if use_file:
+		carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
+		boiDeterminator()
+		# Open a file
+		var file = File.new()
+		if file.open("user://"+Global.BEST_BOI_FPATH, File.WRITE) != 0:
+			print("Error opening file")
+			return
+		file.store_line(to_json(BEST_BOI.neuronNetwork.extract_genes()))
+		file.close()
+		print("File saved in "+Global.BEST_BOI_FPATH)
+	else:
+		print("Enable use_file to use this feature")

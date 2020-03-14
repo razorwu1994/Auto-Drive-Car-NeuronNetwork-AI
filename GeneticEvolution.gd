@@ -65,13 +65,17 @@ class GeneticEvolution:
 	func MUTATION(sprouts):
 		var ret_children=[]
 		var randWeightIdx
-		var child = Array(crossoverChildren[0])
+		var child
 		var weightSize
 		var GENES_TO_MUTATE=3
-#		=int(crossoverChildren[0].size()/3)
 		var weightMutateCounter = 0
+		var perceptron
+		var copiedChild=[]
 		for sprout in range(sprouts):
-			for perceptron in child:
+			child = Array(crossoverChildren[0])
+			copiedChild=[]
+			for p in child:
+				perceptron = p.duplicate(true)
 				randomize()
 				if rand_range(0,1) > PROB_MUTATE:
 					pass
@@ -84,6 +88,7 @@ class GeneticEvolution:
 						perceptron.weights[randWeightIdx]+= Global.generateRandom()
 						weightMutateCounter+=1
 					perceptron.bias += Global.generateRandom()
-			ret_children.append(child)
+				copiedChild.append(perceptron)
+			ret_children.append(copiedChild)
 		return ret_children
 		

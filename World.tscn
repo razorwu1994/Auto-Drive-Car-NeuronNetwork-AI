@@ -194,7 +194,6 @@ position = Vector2( 130.941, 125.298 )
 script = ExtResource( 1 )
 carX = 549.487
 carY = 2248.8
-use_file = true
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 15 )
