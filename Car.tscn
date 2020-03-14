@@ -8,6 +8,7 @@ radius = 33.5763
 height = 69.743
 
 [node name="Car" type="KinematicBody2D"]
+rotation = 3.14159
 collision_layer = 2
 script = ExtResource( 1 )
 

@@ -3,7 +3,7 @@ extends Node
 
 class GeneticEvolution:
 	var PROB_CROSS = 0.4
-	var PROB_MUTATE = 0.1
+	var PROB_MUTATE = 0.01
 	var NUM_OF_NODES=2
 	var selectionParents=[]
 	var crossoverChildren=[]

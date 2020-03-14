@@ -5,6 +5,7 @@ export (int) var population_size = 20
 export (int) var engine_power = 2000
 export (bool) var use_file = false
 export (bool) var allow_rough_bestBoi = false
+export (int) var turn_angle = 22
 var BEST_PROGRESS=0
 var CAR = load("Car.tscn")
 var carsGameTree
@@ -26,7 +27,7 @@ func filterNotSUPALARGEValues(item):
 	return item<Global.SUPA_LARGE_VALUE 
 	
 func compute_progress(carPos):
-	var trace = $GoodBoiGuideLine.curve
+	var trace = $Terrain/GoodBoiGuideLine.curve
 	var p =trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
 	return p
 #	if 1.0 - p < 0.01: 
@@ -74,6 +75,7 @@ func init_cars(genes=[]):
 		spawnedCar.position = Vector2(carX,carY)
 		spawnedCar.scale= Vector2(1,1)
 		spawnedCar.engine_power = engine_power
+		spawnedCar.steering_angle=turn_angle
 		self.add_child(spawnedCar)
 		spawn_one_car(spawnedCar,gene)
 		
@@ -85,12 +87,12 @@ func init_with_file():
 		return []
 	else:
 		var file = File.new()
-		if not file.file_exists("user://"+Global.BEST_BOI_FPATH):
+		if not file.file_exists("user://"+Global.BEST_BOI_FPATH+"-"+str(turn_angle)):
 			print("No file saved!")
 			return
 		
 		# Open existing file
-		if file.open("user://"+Global.BEST_BOI_FPATH, File.READ) != 0:
+		if file.open("user://"+Global.BEST_BOI_FPATH+"-"+str(turn_angle), File.READ) != 0:
 			print("Error opening file")
 			return
 		
@@ -108,6 +110,9 @@ func _physics_process(_delta):
 	collectingProbe()
 	paintCars()
 	checkIfEvolution()
+	if self.has_node('Car'):
+		self.get_node('Car').get_node('Camera2D').current=true
+		
 #	if BEST_BOI !=null:
 #		print(BEST_BOI.neuronNetwork.extract_genes()[0].weights)
 
@@ -253,11 +258,11 @@ func _on_ControlPanel_printBestNN():
 		boiDeterminator()
 		# Open a file
 		var file = File.new()
-		if file.open("user://"+Global.BEST_BOI_FPATH, File.WRITE) != 0:
+		if file.open("user://"+Global.BEST_BOI_FPATH+"-"+str(turn_angle), File.WRITE) != 0:
 			print("Error opening file")
 			return
 		file.store_line(to_json(BEST_BOI.neuronNetwork.extract_genes()))
 		file.close()
-		print("File saved in "+Global.BEST_BOI_FPATH)
+		print("File saved in "+Global.BEST_BOI_FPATH+"-"+str(turn_angle))
 	else:
 		print("Enable use_file to use this feature")
