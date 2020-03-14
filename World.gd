@@ -27,7 +27,11 @@ func filterNotSUPALARGEValues(item):
 	
 func compute_progress(carPos):
 	var trace = $GoodBoiGuideLine.curve
-	return trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
+	var p =trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
+	if 1.0 - p < 0.01: 
+		return 1.0
+	else:
+		return p
 
 func spawn_one_car(node,gene=null):
 	var network = NN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,gene)
@@ -229,7 +233,7 @@ var lastBoys=0
 func _on_DashLine_finished(target):
 	for i in carsGameTree.size():
 		if carsGameTree[i].carNode.get_name() == target.get_name():
-#			carsGameTree[i].carNode.live = false
+			carsGameTree[i].progress = 100
 			goodBoys+=1
 			$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(goodBoys)
 #	print(target.get_name(),' just crossed the line!!!')

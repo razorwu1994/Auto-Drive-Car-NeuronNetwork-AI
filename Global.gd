@@ -8,7 +8,7 @@ var VARIANCE= 0.5
 var MUTATOR = 0.5
 var MATH_E = 2.71828
 var BEST_BOI_FPATH = "best_boi.sav"
-var BOI_RANGE=1
+var BOI_RANGE=0.01
 var PROGRESS_REWARD_FACTOR = 5
 func countNodeSize():
 	var sum=0
