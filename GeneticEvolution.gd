@@ -4,7 +4,7 @@ extends Node
 class GeneticEvolution:
 	var NUM_OF_NODES=2 # Don't change this
 	var PROB_CROSS = 0.3
-	var PROB_MUTATE = 0.1
+	var PROB_MUTATE = 0.01
 	var GENES_TO_MUTATE=2
 	var selectionParents=[]
 	var crossoverChildren=[]

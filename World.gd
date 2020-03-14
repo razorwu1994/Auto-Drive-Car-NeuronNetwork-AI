@@ -225,7 +225,7 @@ func checkIfEvolution():
 			else:
 				cross_variance=0
 			if geAlgo.CROSS_OVER(cross_variance):
-				children_genes=geAlgo.MUTATION(population_size,0,int(Global.MAX_FIT/BEST_BOI.progress))
+				children_genes=geAlgo.MUTATION(population_size,float($CanvasLayer/ControlPanel/ConfigControl/SettingSlider/Value.text),int(Global.MAX_FIT/BEST_BOI.progress))
 			var new_gene=[]
 			for gene in children_genes:
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)

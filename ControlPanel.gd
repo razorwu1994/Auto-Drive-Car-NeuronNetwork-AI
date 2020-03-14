@@ -33,11 +33,16 @@ func _ready():
 			ss.get_node("Label").text = setting
 			ss.get_node("Value").text = str(player.get(setting))	
 			ss.get_node("Slider").connect("value_changed", self, "_on_Value_changed", [ss])
-			
+	$ConfigControl/SettingSlider/Value.text = str(Global.MUTATOR)
+	$ConfigControl/SettingSlider/Slider.value = Global.MUTATOR
+	$ConfigControl/SettingSlider/Slider.connect("value_changed", self, "_on_NNConfig_changed", [$ConfigControl/SettingSlider])
 func _on_Value_changed(value, node):
 	player.set(node.name, value)
 	node.get_node("Value").text = str(value)
 
+func _on_NNConfig_changed(value,node):
+	node.get_node("Value").text = str(value)
+	
 func _input(event):
 	if event.is_action_pressed("ui_focus_next"):
 		visible = !visible
