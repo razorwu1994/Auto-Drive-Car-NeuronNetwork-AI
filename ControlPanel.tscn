@@ -151,9 +151,9 @@ margin_bottom = 16.0
 size_flags_horizontal = 3
 max_value = 5.0
 step = 0.01
-page = 1.0
 value = 1.0
 tick_count = 10
+ticks_on_borders = true
 
 [node name="Value" type="Label" parent="ConfigControl/SettingSlider"]
 margin_left = 174.0
