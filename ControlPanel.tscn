@@ -32,16 +32,19 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+visible = false
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 339.995
 margin_bottom = 257.0
 
 [node name="Speedometer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+visible = false
 margin_right = 329.0
 margin_bottom = 25.0
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer/Speedometer"]
+visible = false
 margin_right = 283.0
 margin_bottom = 25.0
 size_flags_horizontal = 3
@@ -49,6 +52,7 @@ custom_fonts/font = ExtResource( 2 )
 text = "Speed"
 
 [node name="Speed" type="Label" parent="Panel/VBoxContainer/Speedometer"]
+visible = false
 margin_left = 287.0
 margin_right = 329.0
 margin_bottom = 25.0
