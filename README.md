@@ -29,4 +29,4 @@ Current Generation, Live Cars, 1st & 2nd place performance given entire track, s
 - **Manual Drive**: Player A wants to join the game!!! Will make one car controllable by you if there is one instance live for current run. Notice the button will always be disabled if you join and fail once.
 
 
-Disclaimer: This is not/will not be used for Commercial purpose and i don't own any assets.
+Disclaimer: This is not/will not be used for Commercial purpose and i don't own any assets. (Well I did create 4 buttons icon )
