@@ -272,18 +272,63 @@ custom_colors/font_color = Color( 0, 1, 0.109804, 1 )
 text = "0"
 
 [node name="CarGenerator" type="PanelContainer" parent="."]
-margin_left = 351.629
-margin_top = 3.12229
-margin_right = 429.629
-margin_bottom = 81.1223
+margin_left = 854.253
+margin_top = 124.84
+margin_right = 932.253
+margin_bottom = 202.84
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CheckButton" type="TextureButton" parent="CarGenerator"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CarGenerator"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 84.0
+margin_bottom = 89.0
+
+[node name="Label" type="Label" parent="CarGenerator/VBoxContainer"]
+margin_right = 77.0
+margin_bottom = 14.0
+text = "Generator"
+align = 3
+uppercase = true
+
+[node name="CheckButton" type="TextureButton" parent="CarGenerator/VBoxContainer"]
+margin_top = 18.0
+margin_right = 77.0
+margin_bottom = 82.0
+texture_normal = ExtResource( 3 )
+
+[node name="PrintNN" type="PanelContainer" parent="."]
+margin_left = 941.604
+margin_top = 124.84
+margin_right = 1019.6
+margin_bottom = 202.84
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PrintNN"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 71.0
-margin_bottom = 71.0
+margin_bottom = 89.0
+
+[node name="Label" type="Label" parent="PrintNN/VBoxContainer2"]
+margin_right = 64.0
+margin_bottom = 14.0
+text = "Print"
+align = 1
+uppercase = true
+
+[node name="CheckButton" type="TextureButton" parent="PrintNN/VBoxContainer2"]
+self_modulate = Color( 1, 0, 0, 1 )
+margin_top = 18.0
+margin_right = 64.0
+margin_bottom = 82.0
 texture_normal = ExtResource( 3 )
-[connection signal="pressed" from="CarGenerator/CheckButton" to="." method="_on_CheckButton_pressed"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="CarGenerator/VBoxContainer/CheckButton" to="." method="_on_CheckButton_pressed"]
+[connection signal="pressed" from="PrintNN/VBoxContainer2/CheckButton" to="." method="_on_PrintButton_pressed"]

@@ -181,7 +181,7 @@ points = PoolVector2Array( 0, 128, 0, 64, 46.66, 76.6511, 64, 128 )
 2/shapes = [  ]
 2/z_index = 0
 
-[sub_resource type="RectangleShape2D" id=18]
+[sub_resource type="RectangleShape2D" id=16]
 extents = Vector2( 10, 34.3689 )
 
 [sub_resource type="Curve2D" id=17]
@@ -194,7 +194,7 @@ position = Vector2( 130.941, 125.298 )
 script = ExtResource( 1 )
 carX = 549.487
 carY = 2248.8
-population_size = 2
+use_file = true
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 15 )
@@ -232,12 +232,13 @@ texture = ExtResource( 5 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DashLine"]
 position = Vector2( 66.049, -45.5398 )
 scale = Vector2( -32.7547, 8.77789 )
-shape = SubResource( 18 )
+shape = SubResource( 16 )
 
 [node name="GoodBoiGuideLine" type="Path2D" parent="."]
 position = Vector2( -27.5116, 319.933 )
 scale = Vector2( 1.07718, 1.00835 )
 curve = SubResource( 17 )
 [connection signal="carSpawning" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_carSpawning"]
+[connection signal="printBestNN" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_printBestNN"]
 [connection signal="body_entered" from="DashLine" to="DashLine" method="_on_EndPoint_body_entered"]
 [connection signal="finished" from="DashLine" to="." method="_on_DashLine_finished"]

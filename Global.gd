@@ -7,7 +7,7 @@ var INTELLIGENCE=1#8: 5; 5 :20
 var VARIANCE= 0.5
 var MUTATOR = 0.5
 var MATH_E = 2.71828
-
+var BEST_BOI_FPATH = "best_boi.sav"
 
 func countNodeSize():
 	var sum=0

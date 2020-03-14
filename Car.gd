@@ -128,12 +128,11 @@ func nn_input_directional():
 		else:
 			steer_direction = -1 * deg2rad(steering_angle)
 		
-		if abs(engine_power*temp.y)<280:
-			acceleration = transform.x*280*abs(sign(temp.y))
-		elif abs(engine_power*temp.y)<280:
-			acceleration = transform.x*280*abs(sign(temp.y))
+		
+		if abs(engine_power*temp.y)<300:
+			acceleration = transform.x*300
 		elif abs(engine_power*temp.y)>2000:
-			acceleration = transform.x*2000*abs(sign(temp.y))
+			acceleration = transform.x*2000
 		else:
 			acceleration = transform.x * abs(engine_power*temp.y)
 

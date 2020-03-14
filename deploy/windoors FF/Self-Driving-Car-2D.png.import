@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Self-Driving-Car-2D.png-06f6bd75b4bebc4c53323324e7193b29.stex"
+path="res://.import/Self-Driving-Car-2D.png-dee82992c6c3bdf285799ae35e9f6aef.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://deploy/Self-Driving-Car-2D.png"
-dest_files=[ "res://.import/Self-Driving-Car-2D.png-06f6bd75b4bebc4c53323324e7193b29.stex" ]
+source_file="res://deploy/windoors FF/Self-Driving-Car-2D.png"
+dest_files=[ "res://.import/Self-Driving-Car-2D.png-dee82992c6c3bdf285799ae35e9f6aef.stex" ]
 
 [params]
 

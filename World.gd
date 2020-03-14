@@ -3,6 +3,7 @@ export (float) var carX = 400.092
 export (float) var carY = 2286
 export (int) var population_size = 20
 export (int) var engine_power = 2000
+export (bool) var use_file = false
 var BEST_PROGRESS=0
 var CAR = load("Car.tscn")
 var carsGameTree
@@ -48,7 +49,7 @@ func check_if_allDead():
 
 func _ready():
 	generations=0
-	init_cars()
+	init_cars(init_with_file())
 	if self.has_node("Car"):
 		if self.get_node("Car").SELF_DRIVING:
 			$CanvasLayer/ControlPanel/PanelContainer/ControlCenter/CheckButton.pressed=false
@@ -72,7 +73,29 @@ func init_cars(genes=[]):
 		
 	training=true
 	$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
-	
+
+func init_with_file():
+	if !use_file:
+		return []
+	else:
+		var file = File.new()
+		if not file.file_exists("user://"+Global.BEST_BOI_FPATH):
+			print("No file saved!")
+			return
+		
+		# Open existing file
+		if file.open("user://"+Global.BEST_BOI_FPATH, File.READ) != 0:
+			print("Error opening file")
+			return
+		
+		# Get the data
+		var gene = parse_json(file.get_line())
+		var genes = []
+		file.close()
+		for c in range(population_size):
+			genes.append(Global.translate_genes(gene,Global.LAYERS_CONFIGURE))
+		return genes
+		
 func _physics_process(_delta):
 	filterCars()
 #	set_camera()
@@ -185,7 +208,7 @@ func checkIfEvolution():
 		lastBoys=goodBoys
 		goodBoys=0
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(lastBoys)
-		print("last run ",lastBoys)
+#		print("last run ",lastBoys)
 # Signal listener
 var goodBoys=0
 var lastBoys=0
@@ -211,4 +234,14 @@ func _on_ControlPanel_carSpawning():
 #	else:
 #		print('not dead yet')
 
-
+func _on_ControlPanel_printBestNN():
+	carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
+	boiDeterminator()
+	# Open a file
+	var file = File.new()
+	if file.open("user://"+Global.BEST_BOI_FPATH, File.WRITE) != 0:
+		print("Error opening file")
+		return
+	file.store_line(to_json(BEST_BOI.neuronNetwork.extract_genes()))
+	file.close()
+	print("File saved in "+Global.BEST_BOI_FPATH)

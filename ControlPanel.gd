@@ -1,5 +1,6 @@
 extends Control
 signal carSpawning
+signal printBestNN
 export (NodePath) var player_path
 var SettingSlider = preload("res://SettingSlider.tscn")
 var player = null
@@ -50,4 +51,7 @@ func _process(_delta):
 		
 func _on_CheckButton_pressed():
 	emit_signal("carSpawning")
+
+func _on_PrintButton_pressed():
+	emit_signal("printBestNN")
 
