@@ -67,7 +67,7 @@ class GeneticEvolution:
 		var randWeightIdx
 		var child
 		var weightSize
-		var GENES_TO_MUTATE=3
+		var GENES_TO_MUTATE=1
 		var weightMutateCounter = 0
 		var perceptron
 		var copiedChild=[]

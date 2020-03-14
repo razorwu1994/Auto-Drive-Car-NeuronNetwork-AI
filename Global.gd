@@ -1,6 +1,6 @@
 extends Node
 
-var LAYERS_CONFIGURE=[5,4,3,2]  #[8,6,4,2] 
+var LAYERS_CONFIGURE=[6,4,3,2]  #[8,6,4,2] 
 var SUPA_LARGE_VALUE=250 
 var SUPA_SMALL_VALUE=-99999999999999
 var INTELLIGENCE=1#8: 5; 5 :20
@@ -8,7 +8,8 @@ var VARIANCE= 0.5
 var MUTATOR = 0.5
 var MATH_E = 2.71828
 var BEST_BOI_FPATH = "best_boi.sav"
-
+var BOI_RANGE=1
+var PROGRESS_REWARD_FACTOR = 5
 func countNodeSize():
 	var sum=0
 	for node in LAYERS_CONFIGURE:

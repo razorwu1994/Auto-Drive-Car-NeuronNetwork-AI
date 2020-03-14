@@ -15,10 +15,10 @@ class Perceptron:
 		var output = 0
 		for i in inputs.size():
 			output+=weights[i]*inputs[i]*Global.INTELLIGENCE
-		output = 1/Global.revised_sigmoid(output+bias) 
+#		output = 1/Global.revised_sigmoid(output+bias) 
 #		output +=bias
 #		output +=Global.sigmoid(output)-0.5+bias
-#		output = tanh(output+bias)
+		output = tanh(output+bias)
 #		print(inputs," ",output)
 		return output 
 

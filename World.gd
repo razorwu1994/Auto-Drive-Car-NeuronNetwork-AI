@@ -4,6 +4,7 @@ export (float) var carY = 2286
 export (int) var population_size = 20
 export (int) var engine_power = 2000
 export (bool) var use_file = false
+export (bool) var allow_rough_bestBoi = false
 var BEST_PROGRESS=0
 var CAR = load("Car.tscn")
 var carsGameTree
@@ -110,7 +111,8 @@ var COLOR_ARRAY=[Color.red,Color.green]
 func paintCars():
 	carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
 	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
-	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % carsGameTree[1].progress)+"%"
+	if carsGameTree[1] != null:
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % carsGameTree[1].progress)+"%"
 	var liveCars = filter(funcref(self,"filterLiveCars"),carsGameTree)
 	liveCars.sort_custom(Global.CarProgressSorter,'sort_descending')
 	if liveCars.size()>0:
@@ -118,13 +120,14 @@ func paintCars():
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/speed/stat.text= "%4.1f" % liveCars[0].carNode.velocity.length()
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/turn/stat.text= "%1.4f degree" % (liveCars[0].carNode.rotation*180/PI)
 		
-	#	print(carsGameTree[0].progress," ",carsGameTree[1].progress)
 		var counter = 0
 		while counter < liveCars.size():
 			if counter < 2:
 				liveCars[counter].carNode.get_node('carSprite').self_modulate=COLOR_ARRAY[counter]
+				liveCars[counter].carNode.z_index = 10
 			else:
 				liveCars[counter].carNode.get_node('carSprite').self_modulate=Color.white
+				liveCars[counter].carNode.z_index = 9
 			counter+=1
 		
 	
@@ -154,31 +157,40 @@ func set_camera():
 # Functional function: Collect inputs for Neuron Network
 func collectingProbe():
 	var network
+	var carInputs
 	for car in carsGameTree:
 		if car.carNode.live:
 			network=car.neuronNetwork
-			network.set_inputs(car.carNode.sensorDistances)
+			carInputs=car.carNode.sensorDistances
+			carInputs.append(car.progress*Global.PROGRESS_REWARD_FACTOR)
+			network.set_inputs(carInputs)
 			if network.activate_nn():
 					var command=network.get_outputs()	
-#					print(car.carNode.sensorDistances, " comand is ",command)	
+
 					car.carNode.NN_turn=command[0]
 					car.carNode.NN_gas=command[1]
 
 var BEST_BOI
 var BETTER_BOI
 func boiDeterminator():
+	var variator=0
+	if allow_rough_bestBoi:
+		variator=Global.BOI_RANGE
 	if BEST_BOI == null:
 		BEST_BOI = carsGameTree[0]
+		print("NEW BEST BOIIIII")
 	else:
-		if carsGameTree[0].progress > BEST_BOI.progress:
+		if carsGameTree[0].progress > (BEST_BOI.progress-variator):
 			BEST_BOI = carsGameTree[0]
-	if BETTER_BOI == null:
+			print("NEW BEST BOIIIII")
+	if BETTER_BOI == null && carsGameTree[1] !=null:
 		BETTER_BOI = carsGameTree[1]
 	else:
-		if carsGameTree[0].progress > BETTER_BOI.progress:
-			BETTER_BOI = carsGameTree[0]
-		elif carsGameTree[1].progress > BETTER_BOI.progress:
+		if  carsGameTree[1] !=null&& carsGameTree[1].progress > ( BETTER_BOI.progress-variator) :
 			BETTER_BOI = carsGameTree[1]
+		elif carsGameTree[0].progress >( BETTER_BOI.progress-variator):
+			BETTER_BOI = carsGameTree[0]
+
 # Functional function : Select 2 best performance parents and give birth to children
 func checkIfEvolution():
 	if !training: return;
@@ -186,7 +198,7 @@ func checkIfEvolution():
 	if ifAllDead:
 		training=false
 		carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
-#		print(carsGameTree[0].progress,carsGameTree[1].progress)
+
 		boiDeterminator()
 		BEST_PROGRESS =  BEST_BOI.progress
 
@@ -198,12 +210,9 @@ func checkIfEvolution():
 			if geAlgo.CROSS_OVER():
 				children_genes=geAlgo.MUTATION(population_size)
 			var new_gene=[]
-			var i = 0
 			for gene in children_genes:
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
 				new_cars.append(new_gene)
-				Global.printToFile(gene,"test"+str(i)+"_"+Global.BEST_BOI_FPATH)
-				i+=1
 
 		init_cars(new_cars)
 #		print(carsGameTree[0].neuronNetwork.extract_genes())
@@ -232,11 +241,6 @@ func _on_ControlPanel_carSpawning():
 		car.carNode.live=false
 		self.remove_child(car.carNode)
 	checkIfEvolution()
-##	var ifAllDead = check_if_allDead()
-##	if ifAllDead:
-##		init_cars()
-#	else:
-#		print('not dead yet')
 
 func _on_ControlPanel_printBestNN():
 	if use_file:

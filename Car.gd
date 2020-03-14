@@ -91,7 +91,7 @@ func on_collided(_body):
 
 func read_distances():
 	sensorDistances=[]
-	for i in Global.LAYERS_CONFIGURE[0]:
+	for i in Global.LAYERS_CONFIGURE[0]-1:
 		sensorDistances.append(get_node("Sensor"+str(i)).globalDistance)	
 #	=[$Sensor.globalDistance,$Sensor2.globalDistance,$Sensor3.globalDistance,$Sensor4.globalDistance,$Sensor5.globalDistance]
 
