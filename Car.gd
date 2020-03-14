@@ -86,8 +86,8 @@ var lastTurn=rand_range(-1,1)
 func on_collided(_body):
 	if live:
 #		print(self.get_name(),' 报废一辆')
-		if SELF_DRIVING:
-			live=false
+#		if SELF_DRIVING:
+		live=false
 
 func read_distances():
 	sensorDistances=[]

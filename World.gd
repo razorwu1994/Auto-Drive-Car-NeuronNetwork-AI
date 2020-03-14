@@ -30,10 +30,6 @@ func compute_progress(carPos):
 	var trace = $Terrain/GoodBoiGuideLine.curve
 	var p =trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
 	return p
-#	if 1.0 - p < 0.01: 
-#		return 1.0
-#	else:
-#		return p
 
 func spawn_one_car(node,gene=null):
 	var network = NN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,gene)
@@ -110,6 +106,8 @@ func _physics_process(_delta):
 	collectingProbe()
 	paintCars()
 	checkIfEvolution()
+	if !self.has_node('Car')&& $CanvasLayer/ControlPanel/SelfDrive/ControlCenter/CheckButton.pressed:
+		$CanvasLayer/ControlPanel/SelfDrive/ControlCenter/CheckButton.pressed=false
 	if self.has_node('Car') && !self.get_node('Car').SELF_DRIVING:
 		self.get_node('Car').get_node('Camera2D').current=true
 		
@@ -293,3 +291,13 @@ func _on_ControlPanel_useChampionBoi():
 	for _p in range(population_size):
 		genes.append(Global.translate_genes(Global.CHAMPION_BOI,Global.LAYERS_CONFIGURE))
 	init_cars(genes)
+
+
+func _on_ControlPanel_manualDrive():
+	if self.has_node("Car"):
+		self.get_node("Car").SELF_DRIVING=false
+
+
+func _on_ControlPanel_selfDrive():
+	if self.has_node("Car"):
+		self.get_node("Car").SELF_DRIVING=true

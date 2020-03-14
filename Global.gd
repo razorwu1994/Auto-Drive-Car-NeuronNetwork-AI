@@ -22,7 +22,7 @@ var BEST_BOI_FPATH = "best_boi.sav"
 
 # SENSOR
 var SENSOR_SAFE_DISTANCE=20
-var SENSOR_TOLERANCE_OFFSET = 4
+var SENSOR_TOLERANCE_OFFSET = 2
 
 func countNodeSize():
 	var sum=0

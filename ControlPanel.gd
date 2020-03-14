@@ -3,6 +3,8 @@ signal carSpawning
 signal printBestNN
 signal discardBestBoi
 signal useChampionBoi
+signal manualDrive
+signal selfDrive
 export (NodePath) var player_path
 var SettingSlider = preload("res://SettingSlider.tscn")
 var player = null
@@ -68,3 +70,9 @@ func _on_ClearButton_pressed():
 
 func _on_UseChampionBoi_pressed():
 	emit_signal("useChampionBoi") 
+
+func _on_ManualDrive_toggled(button_pressed):
+	if button_pressed:
+		emit_signal("manualDrive") 
+	else:
+		emit_signal("selfDrive") 

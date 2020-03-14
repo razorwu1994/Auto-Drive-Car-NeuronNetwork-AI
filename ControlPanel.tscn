@@ -21,6 +21,7 @@ __meta__ = {
 }
 
 [node name="Panel" type="PanelContainer" parent="."]
+visible = false
 margin_left = 671.985
 margin_top = 331.66
 margin_right = 1021.98
@@ -33,30 +34,33 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 340.0
+margin_right = 339.995
 margin_bottom = 257.0
 
 [node name="Speedometer" type="HBoxContainer" parent="Panel/VBoxContainer"]
-margin_right = 330.0
+margin_right = 329.0
 margin_bottom = 25.0
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer/Speedometer"]
-margin_right = 284.0
+margin_right = 283.0
 margin_bottom = 25.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 2 )
 text = "Speed"
 
 [node name="Speed" type="Label" parent="Panel/VBoxContainer/Speedometer"]
-margin_left = 288.0
-margin_right = 330.0
+margin_left = 287.0
+margin_right = 329.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 2 )
 text = "100"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 margin_left = 797.7
 margin_top = 277.347
 margin_right = 1020.7
@@ -80,9 +84,36 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConfigControl" type="PanelContainer" parent="."]
+[node name="SelfDrive" type="PanelContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+margin_left = 837.763
+margin_top = 57.6461
+margin_right = 1015.76
+margin_bottom = 111.646
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControlCenter" type="VBoxContainer" parent="SelfDrive"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 171.0
+margin_bottom = 47.0
+
+[node name="CheckButton" type="CheckButton" parent="SelfDrive/ControlCenter"]
+margin_right = 164.0
+margin_bottom = 40.0
+text = "Manual Drive"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfigControl" type="PanelContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
 margin_left = 801.383
 margin_top = 1.10501
 margin_right = 1024.38
@@ -94,7 +125,7 @@ __meta__ = {
 [node name="SettingSlider" type="HBoxContainer" parent="ConfigControl"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 216.0
+margin_right = 215.997
 margin_bottom = 47.0
 custom_constants/separation = 15
 __meta__ = {
@@ -103,25 +134,27 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="ConfigControl/SettingSlider"]
 margin_top = 7.0
-margin_right = 74.0
+margin_right = 83.0
 margin_bottom = 32.0
 custom_fonts/font = ExtResource( 2 )
-text = "mutate"
+text = "learning"
 valign = 1
 
 [node name="Slider" type="HSlider" parent="ConfigControl/SettingSlider"]
-margin_left = 89.0
-margin_right = 160.0
+margin_left = 98.0
+margin_right = 159.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 max_value = 5.0
 step = 0.01
+page = 1.0
 value = 1.0
+tick_count = 10
 
 [node name="Value" type="Label" parent="ConfigControl/SettingSlider"]
-margin_left = 175.0
+margin_left = 174.0
 margin_top = 7.0
-margin_right = 209.0
+margin_right = 208.0
 margin_bottom = 32.0
 custom_fonts/font = ExtResource( 2 )
 text = "0.1"
@@ -439,6 +472,7 @@ texture_normal = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="toggled" from="SelfDrive/ControlCenter/CheckButton" to="." method="_on_ManualDrive_toggled"]
 [connection signal="pressed" from="DiscardBestBoi/VBoxContainer/CheckButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="CarGenerator/VBoxContainer/CheckButton" to="." method="_on_CheckButton_pressed"]
 [connection signal="pressed" from="PrintNN/VBoxContainer2/CheckButton" to="." method="_on_PrintButton_pressed"]
