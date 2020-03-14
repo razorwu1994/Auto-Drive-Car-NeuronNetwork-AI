@@ -28,10 +28,11 @@ func filterNotSUPALARGEValues(item):
 func compute_progress(carPos):
 	var trace = $GoodBoiGuideLine.curve
 	var p =trace.get_closest_offset(trace.get_closest_point(carPos))/trace.get_baked_length()
-	if 1.0 - p < 0.01: 
-		return 1.0
-	else:
-		return p
+	return p
+#	if 1.0 - p < 0.01: 
+#		return 1.0
+#	else:
+#		return p
 
 func spawn_one_car(node,gene=null):
 	var network = NN.NeuronNetwork.new(Global.LAYERS_CONFIGURE,gene)
