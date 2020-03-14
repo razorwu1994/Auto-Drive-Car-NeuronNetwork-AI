@@ -100,7 +100,7 @@ func init_with_file():
 		var gene = parse_json(file.get_line())
 		var genes = []
 		file.close()
-		for c in range(population_size):
+		for _c in range(population_size):
 			genes.append(Global.translate_genes(gene,Global.LAYERS_CONFIGURE))
 		return genes
 		
@@ -110,18 +110,17 @@ func _physics_process(_delta):
 	collectingProbe()
 	paintCars()
 	checkIfEvolution()
-	if self.has_node('Car'):
+	if self.has_node('Car') && !self.get_node('Car').SELF_DRIVING:
 		self.get_node('Car').get_node('Camera2D').current=true
 		
-#	if BEST_BOI !=null:
-#		print(BEST_BOI.neuronNetwork.extract_genes()[0].weights)
 
 var COLOR_ARRAY=[Color.red,Color.green]
 # UI function
 func paintCars():
 	carsGameTree.sort_custom(Global.CarProgressSorter,'sort_descending')
-	$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
-	if carsGameTree[1] != null:
+	if carsGameTree.size()>0:
+		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/first/progress.text= str("%2.4f" % carsGameTree[0].progress)+"%"
+	if carsGameTree.size()>1:
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/HB/second/progress.text= str("%2.4f" % carsGameTree[1].progress)+"%"
 	var liveCars = filter(funcref(self,"filterLiveCars"),carsGameTree)
 	liveCars.sort_custom(Global.CarProgressSorter,'sort_descending')
@@ -134,7 +133,7 @@ func paintCars():
 		while counter < liveCars.size():
 			if counter < 2:
 				liveCars[counter].carNode.get_node('carSprite').self_modulate=COLOR_ARRAY[counter]
-				liveCars[counter].carNode.z_index = 10
+				liveCars[counter].carNode.z_index = 10+ 2-counter
 			else:
 				liveCars[counter].carNode.get_node('carSprite').self_modulate=Color.white
 				liveCars[counter].carNode.z_index = 9
@@ -186,20 +185,22 @@ func boiDeterminator():
 	var variator=0
 	if allow_rough_bestBoi:
 		variator=Global.BOI_RANGE
-	if BEST_BOI == null:
-		BEST_BOI = carsGameTree[0]
-		print("NEW BEST BOIIIII")
-	else:
-		if carsGameTree[0].progress > (BEST_BOI.progress-variator):
+	if carsGameTree.size() > 0:
+		if BEST_BOI == null:
 			BEST_BOI = carsGameTree[0]
 			print("NEW BEST BOIIIII")
-	if BETTER_BOI == null && carsGameTree[1] !=null:
-		BETTER_BOI = carsGameTree[1]
-	else:
-		if  carsGameTree[1] !=null&& carsGameTree[1].progress > ( BETTER_BOI.progress-variator) :
+		elif carsGameTree[0].progress > (BEST_BOI.progress-variator):
+			BEST_BOI = carsGameTree[0]
+			print("NEW BEST BOIIIII")
+	
+	if carsGameTree.size() > 1:
+		if BETTER_BOI == null:
 			BETTER_BOI = carsGameTree[1]
-		elif carsGameTree[0].progress >( BETTER_BOI.progress-variator):
-			BETTER_BOI = carsGameTree[0]
+		else:
+			if  carsGameTree[1].progress > ( BETTER_BOI.progress-variator) :
+				BETTER_BOI = carsGameTree[1]
+			elif carsGameTree[0].progress >( BETTER_BOI.progress-variator):
+				BETTER_BOI = carsGameTree[0]
 
 # Functional function : Select 2 best performance parents and give birth to children
 func checkIfEvolution():
@@ -217,8 +218,14 @@ func checkIfEvolution():
 		if population_size>1:
 			var geAlgo = GE.GeneticEvolution.new([BEST_BOI.neuronNetwork.extract_genes(),BETTER_BOI.neuronNetwork.extract_genes()],Global.countNodeSize())
 			var children_genes = []
-			if geAlgo.CROSS_OVER():
-				children_genes=geAlgo.MUTATION(population_size)
+			# Increase cross prob if best and better are really close
+			var cross_variance = BEST_BOI.progress-BETTER_BOI.progress
+			if cross_variance < 2:
+				cross_variance = 0.1
+			else:
+				cross_variance=0
+			if geAlgo.CROSS_OVER(cross_variance):
+				children_genes=geAlgo.MUTATION(population_size,0,Global.MAX_FIT/BEST_BOI.progress)
 			var new_gene=[]
 			for gene in children_genes:
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
@@ -266,3 +273,10 @@ func _on_ControlPanel_printBestNN():
 		print("File saved in "+Global.BEST_BOI_FPATH+"-"+str(turn_angle))
 	else:
 		print("Enable use_file to use this feature")
+
+
+func _on_ControlPanel_discardBestBoi():
+	BEST_BOI=null
+	BETTER_BOI=null
+	BEST_PROGRESS=0
+	$CanvasLayer/ControlPanel/Stats/ControlCenter/best/stat.text="N/A%"

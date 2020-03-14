@@ -25,6 +25,11 @@ Global="*res://Global.gd"
 NN="*res://NeuronNetwork.gd"
 GE="*res://GeneticEvolution.gd"
 
+[display]
+
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
+
 [input]
 
 steer_left={

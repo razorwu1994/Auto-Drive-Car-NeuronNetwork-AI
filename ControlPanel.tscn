@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ControlPanel.gd" type="Script" id=1]
 [ext_resource path="res://font_x20.tres" type="DynamicFont" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://assets/print.png" type="Texture" id=3]
+[ext_resource path="res://assets/clear.png" type="Texture" id=4]
+[ext_resource path="res://assets/gene.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 10.0
@@ -271,11 +273,39 @@ margin_bottom = 14.0
 custom_colors/font_color = Color( 0, 1, 0.109804, 1 )
 text = "0"
 
+[node name="DiscardBestBoi" type="PanelContainer" parent="."]
+margin_left = 727.222
+margin_top = 123.789
+margin_right = 827.222
+margin_bottom = 235.789
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DiscardBestBoi"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 93.0
+margin_bottom = 105.0
+
+[node name="Label" type="Label" parent="DiscardBestBoi/VBoxContainer"]
+margin_right = 86.0
+margin_bottom = 14.0
+text = "Discard boi"
+align = 3
+uppercase = true
+
+[node name="CheckButton" type="TextureButton" parent="DiscardBestBoi/VBoxContainer"]
+margin_top = 18.0
+margin_right = 86.0
+margin_bottom = 98.0
+texture_normal = ExtResource( 4 )
+
 [node name="CarGenerator" type="PanelContainer" parent="."]
-margin_left = 854.253
-margin_top = 124.84
-margin_right = 932.253
-margin_bottom = 202.84
+margin_left = 827.535
+margin_top = 123.513
+margin_right = 921.535
+margin_bottom = 235.513
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -283,11 +313,11 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="CarGenerator"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 127.0
-margin_bottom = 89.0
+margin_right = 87.0
+margin_bottom = 105.0
 
 [node name="Label" type="Label" parent="CarGenerator/VBoxContainer"]
-margin_right = 120.0
+margin_right = 80.0
 margin_bottom = 14.0
 text = "Next Gene"
 align = 3
@@ -295,15 +325,15 @@ uppercase = true
 
 [node name="CheckButton" type="TextureButton" parent="CarGenerator/VBoxContainer"]
 margin_top = 18.0
-margin_right = 120.0
-margin_bottom = 82.0
-texture_normal = ExtResource( 3 )
+margin_right = 80.0
+margin_bottom = 98.0
+texture_normal = ExtResource( 5 )
 
 [node name="PrintNN" type="PanelContainer" parent="."]
-margin_left = 941.604
+margin_left = 923.511
 margin_top = 124.84
-margin_right = 1019.6
-margin_bottom = 202.84
+margin_right = 1017.51
+margin_bottom = 236.84
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -311,24 +341,24 @@ __meta__ = {
 [node name="VBoxContainer2" type="VBoxContainer" parent="PrintNN"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 71.0
-margin_bottom = 89.0
+margin_right = 87.0
+margin_bottom = 105.0
 
 [node name="Label" type="Label" parent="PrintNN/VBoxContainer2"]
-margin_right = 64.0
+margin_right = 80.0
 margin_bottom = 14.0
 text = "Print"
 align = 1
 uppercase = true
 
 [node name="CheckButton" type="TextureButton" parent="PrintNN/VBoxContainer2"]
-self_modulate = Color( 1, 0, 0, 1 )
 margin_top = 18.0
-margin_right = 64.0
-margin_bottom = 82.0
+margin_right = 80.0
+margin_bottom = 98.0
 texture_normal = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="pressed" from="DiscardBestBoi/VBoxContainer/CheckButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="CarGenerator/VBoxContainer/CheckButton" to="." method="_on_CheckButton_pressed"]
 [connection signal="pressed" from="PrintNN/VBoxContainer2/CheckButton" to="." method="_on_PrintButton_pressed"]

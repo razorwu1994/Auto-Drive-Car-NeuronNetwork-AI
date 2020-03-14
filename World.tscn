@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://terrain/Advance.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Car.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ControlPanel.tscn" type="PackedScene" id=4]
 
 [node name="World" type="Node2D"]
@@ -9,14 +10,17 @@ position = Vector2( 130.941, 125.298 )
 script = ExtResource( 1 )
 carX = 783.7
 carY = 360.322
-population_size = 50
-use_file = true
-turn_angle = 25
+allow_rough_bestBoi = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ControlPanel" parent="CanvasLayer" instance=ExtResource( 4 )]
+player_path = NodePath("../../Car")
 
 [node name="Terrain" parent="." instance=ExtResource( 2 )]
+
+[node name="Car" parent="." instance=ExtResource( 3 )]
+position = Vector2( 641.21, 412.983 )
 [connection signal="carSpawning" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_carSpawning"]
+[connection signal="discardBestBoi" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_discardBestBoi"]
 [connection signal="printBestNN" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_printBestNN"]
