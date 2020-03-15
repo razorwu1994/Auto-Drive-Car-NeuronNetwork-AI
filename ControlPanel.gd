@@ -35,8 +35,8 @@ func _ready():
 			ss.get_node("Label").text = setting
 			ss.get_node("Value").text = str(player.get(setting))	
 			ss.get_node("Slider").connect("value_changed", self, "_on_Value_changed", [ss])
-	$ConfigControl/SettingSlider/Value.text = str(Global.MUTATOR)
-	$ConfigControl/SettingSlider/Slider.value = Global.MUTATOR
+	$ConfigControl/SettingSlider/Value.text = str(Global.EXTRA_MUTATE_PROB)
+	$ConfigControl/SettingSlider/Slider.value = Global.EXTRA_MUTATE_PROB
 	$ConfigControl/SettingSlider/Slider.connect("value_changed", self, "_on_NNConfig_changed", [$ConfigControl/SettingSlider])
 func _on_Value_changed(value, node):
 	player.set(node.name, value)

@@ -22,7 +22,6 @@ player_path = NodePath("../../Car")
 
 [node name="Car" parent="." instance=ExtResource( 3 )]
 position = Vector2( 641.21, 412.983 )
-SELF_DRIVING = false
 [connection signal="carSpawning" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_carSpawning"]
 [connection signal="discardBestBoi" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_discardBestBoi"]
 [connection signal="manualDrive" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_manualDrive"]
