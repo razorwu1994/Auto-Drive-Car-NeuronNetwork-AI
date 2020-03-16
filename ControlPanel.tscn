@@ -472,10 +472,10 @@ margin_bottom = 98.0
 texture_normal = ExtResource( 5 )
 
 [node name="PrintNN" type="PanelContainer" parent="."]
-margin_left = 515.398
-margin_top = 1.69003
-margin_right = 609.398
-margin_bottom = 113.69
+margin_left = 603.795
+margin_top = 0.462277
+margin_right = 697.795
+margin_bottom = 112.462
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -503,10 +503,10 @@ __meta__ = {
 }
 
 [node name="UseChampionBoi" type="PanelContainer" parent="."]
-margin_left = 614.505
-margin_top = 1.53851
-margin_right = 708.505
-margin_bottom = 113.539
+margin_left = 510.147
+margin_top = 0.310773
+margin_right = 604.147
+margin_bottom = 112.311
 __meta__ = {
 "_edit_use_anchors_": false
 }
