@@ -10,7 +10,7 @@ position = Vector2( 130.941, 125.298 )
 script = ExtResource( 1 )
 carX = 783.7
 carY = 360.322
-population_size = 50
+population_size = 25
 allow_rough_bestBoi = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
