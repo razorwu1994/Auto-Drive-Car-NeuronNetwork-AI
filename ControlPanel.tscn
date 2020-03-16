@@ -32,19 +32,16 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
-visible = false
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 339.995
 margin_bottom = 257.0
 
 [node name="Speedometer" type="HBoxContainer" parent="Panel/VBoxContainer"]
-visible = false
 margin_right = 329.0
 margin_bottom = 25.0
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer/Speedometer"]
-visible = false
 margin_right = 283.0
 margin_bottom = 25.0
 size_flags_horizontal = 3
@@ -52,7 +49,6 @@ custom_fonts/font = ExtResource( 2 )
 text = "Speed"
 
 [node name="Speed" type="Label" parent="Panel/VBoxContainer/Speedometer"]
-visible = false
 margin_left = 287.0
 margin_right = 329.0
 margin_bottom = 25.0
@@ -60,15 +56,14 @@ custom_fonts/font = ExtResource( 2 )
 text = "100"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = 797.7
-margin_top = 277.347
-margin_right = 1020.7
-margin_bottom = 331.347
+margin_left = 781.833
+margin_top = 234.507
+margin_right = 1018.83
+margin_bottom = 288.507
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -76,14 +71,41 @@ __meta__ = {
 [node name="ControlCenter" type="VBoxContainer" parent="PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 216.0
+margin_right = 230.0
 margin_bottom = 47.0
 
 [node name="CheckButton" type="CheckButton" parent="PanelContainer/ControlCenter"]
-margin_right = 209.0
+margin_right = 223.0
 margin_bottom = 40.0
 pressed = true
-text = "Show Control Center"
+text = "Display Manual Center"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Display Sensor" type="PanelContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 830.186
+margin_top = 106.683
+margin_right = 1018.19
+margin_bottom = 160.683
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControlCenter" type="VBoxContainer" parent="Display Sensor"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 181.0
+margin_bottom = 47.0
+
+[node name="CheckButton" type="CheckButton" parent="Display Sensor/ControlCenter"]
+margin_right = 174.0
+margin_bottom = 40.0
+text = "Display Sensor"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -93,10 +115,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = 837.763
-margin_top = 57.6461
-margin_right = 1015.76
-margin_bottom = 111.646
+margin_left = 839.515
+margin_top = 172.465
+margin_right = 1017.51
+margin_bottom = 226.465
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -126,25 +148,28 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SettingSlider" type="HBoxContainer" parent="ConfigControl"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfigControl"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 215.997
-margin_bottom = 47.0
+margin_bottom = 90.0
+
+[node name="passion" type="HBoxContainer" parent="ConfigControl/VBoxContainer"]
+margin_right = 208.0
+margin_bottom = 25.0
 custom_constants/separation = 15
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="ConfigControl/SettingSlider"]
-margin_top = 7.0
+[node name="Label" type="Label" parent="ConfigControl/VBoxContainer/passion"]
 margin_right = 81.0
-margin_bottom = 32.0
+margin_bottom = 25.0
 custom_fonts/font = ExtResource( 2 )
 text = "passion"
 valign = 1
 
-[node name="Slider" type="HSlider" parent="ConfigControl/SettingSlider"]
+[node name="Slider" type="HSlider" parent="ConfigControl/VBoxContainer/passion"]
 margin_left = 96.0
 margin_right = 159.0
 margin_bottom = 16.0
@@ -155,13 +180,83 @@ value = 0.99
 tick_count = 10
 ticks_on_borders = true
 
-[node name="Value" type="Label" parent="ConfigControl/SettingSlider"]
+[node name="Value" type="Label" parent="ConfigControl/VBoxContainer/passion"]
 margin_left = 174.0
-margin_top = 7.0
 margin_right = 208.0
-margin_bottom = 32.0
+margin_bottom = 25.0
 custom_fonts/font = ExtResource( 2 )
 text = "0.1"
+valign = 1
+
+[node name="turn" type="HBoxContainer" parent="ConfigControl/VBoxContainer"]
+margin_top = 29.0
+margin_right = 208.0
+margin_bottom = 54.0
+custom_constants/separation = 15
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ConfigControl/VBoxContainer/turn"]
+margin_right = 105.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 2 )
+text = "turn angle"
+valign = 1
+
+[node name="Slider" type="HSlider" parent="ConfigControl/VBoxContainer/turn"]
+margin_left = 120.0
+margin_right = 159.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+max_value = 60.0
+step = 1.0
+value = 22.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Value" type="Label" parent="ConfigControl/VBoxContainer/turn"]
+margin_left = 174.0
+margin_right = 208.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 2 )
+text = "0.1"
+valign = 1
+
+[node name="population" type="HBoxContainer" parent="ConfigControl/VBoxContainer"]
+margin_top = 58.0
+margin_right = 208.0
+margin_bottom = 83.0
+custom_constants/separation = 15
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ConfigControl/VBoxContainer/population"]
+margin_right = 83.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 2 )
+text = "learning"
+valign = 1
+
+[node name="Slider" type="HSlider" parent="ConfigControl/VBoxContainer/population"]
+margin_left = 98.0
+margin_right = 165.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 100.0
+step = 1.0
+value = 25.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Value" type="Label" parent="ConfigControl/VBoxContainer/population"]
+margin_left = 180.0
+margin_right = 208.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 2 )
+text = "25"
 valign = 1
 
 [node name="Stats" type="PanelContainer" parent="."]
@@ -170,7 +265,7 @@ anchor_bottom = 1.0
 margin_left = 5.73987
 margin_top = 2.72254
 margin_right = 305.742
-margin_bottom = 120.723
+margin_bottom = 84.7225
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -179,7 +274,7 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 293.002
-margin_bottom = 111.0
+margin_bottom = 75.0
 
 [node name="Generation" type="HBoxContainer" parent="Stats/ControlCenter"]
 margin_right = 286.0
@@ -300,30 +395,10 @@ margin_bottom = 14.0
 custom_colors/font_color = Color( 1, 0.607843, 0, 1 )
 text = "10%"
 
-[node name="turn" type="HBoxContainer" parent="Stats/ControlCenter"]
+[node name="best" type="HBoxContainer" parent="Stats/ControlCenter"]
 margin_top = 54.0
 margin_right = 286.0
 margin_bottom = 68.0
-grow_horizontal = 2
-
-[node name="Label" type="Label" parent="Stats/ControlCenter/turn"]
-margin_right = 47.0
-margin_bottom = 14.0
-custom_colors/font_color = Color( 0, 0.505882, 1, 1 )
-text = "TURN : "
-uppercase = true
-
-[node name="stat" type="Label" parent="Stats/ControlCenter/turn"]
-margin_left = 51.0
-margin_right = 79.0
-margin_bottom = 14.0
-custom_colors/font_color = Color( 0, 0.505882, 1, 1 )
-text = "10%"
-
-[node name="best" type="HBoxContainer" parent="Stats/ControlCenter"]
-margin_top = 72.0
-margin_right = 286.0
-margin_bottom = 86.0
 grow_horizontal = 2
 
 [node name="Label" type="Label" parent="Stats/ControlCenter/best"]
@@ -339,25 +414,6 @@ margin_right = 123.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 1, 0, 0.890196, 1 )
 text = "0%"
-
-[node name="goodboi" type="HBoxContainer" parent="Stats/ControlCenter"]
-margin_top = 90.0
-margin_right = 286.0
-margin_bottom = 104.0
-grow_horizontal = 2
-
-[node name="Label" type="Label" parent="Stats/ControlCenter/goodboi"]
-margin_right = 156.0
-margin_bottom = 14.0
-custom_colors/font_color = Color( 0, 1, 0.109804, 1 )
-text = "LAST RUN GOOD BOIs : "
-
-[node name="stat" type="Label" parent="Stats/ControlCenter/goodboi"]
-margin_left = 160.0
-margin_right = 168.0
-margin_bottom = 14.0
-custom_colors/font_color = Color( 0, 1, 0.109804, 1 )
-text = "0"
 
 [node name="DiscardBestBoi" type="PanelContainer" parent="."]
 margin_left = 311.949
@@ -476,6 +532,7 @@ texture_normal = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="toggled" from="Display Sensor/ControlCenter/CheckButton" to="." method="_on_DisplaySensor_toggled"]
 [connection signal="toggled" from="SelfDrive/ControlCenter/CheckButton" to="." method="_on_ManualDrive_toggled"]
 [connection signal="pressed" from="DiscardBestBoi/VBoxContainer/CheckButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="CarGenerator/VBoxContainer/CheckButton" to="." method="_on_CheckButton_pressed"]

@@ -1,10 +1,10 @@
 extends KinematicBody2D
 
 export var SELF_DRIVING=true
-
+var SHOW_SENSOR=false
 var engine_power =800
 var wheel_base = 70
-var steering_angle = 15
+var steering_angle = Global.TURN_ANGLE
 var friction = -0.9
 var drag = -0.001
 var braking = -450

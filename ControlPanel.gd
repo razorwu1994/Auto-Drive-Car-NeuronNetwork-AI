@@ -5,6 +5,8 @@ signal discardBestBoi
 signal useChampionBoi
 signal manualDrive
 signal selfDrive
+signal hideSensor
+signal showSensor
 export (NodePath) var player_path
 var SettingSlider = preload("res://SettingSlider.tscn")
 var player = null
@@ -35,9 +37,19 @@ func _ready():
 			ss.get_node("Label").text = setting
 			ss.get_node("Value").text = str(player.get(setting))	
 			ss.get_node("Slider").connect("value_changed", self, "_on_Value_changed", [ss])
-	$ConfigControl/SettingSlider/Value.text = str(Global.EXTRA_MUTATE_PROB)
-	$ConfigControl/SettingSlider/Slider.value = Global.EXTRA_MUTATE_PROB
-	$ConfigControl/SettingSlider/Slider.connect("value_changed", self, "_on_NNConfig_changed", [$ConfigControl/SettingSlider])
+	
+	$ConfigControl/VBoxContainer/passion/Value.text = str(Global.EXTRA_MUTATE_PROB)
+	$ConfigControl/VBoxContainer/passion/Slider.value = Global.EXTRA_MUTATE_PROB
+	$ConfigControl/VBoxContainer/passion/Slider.connect("value_changed", self, "_on_NNConfig_changed", [$ConfigControl/VBoxContainer/passion])
+
+	$ConfigControl/VBoxContainer/turn/Value.text = str(Global.TURN_ANGLE)
+	$ConfigControl/VBoxContainer/turn/Slider.value = Global.TURN_ANGLE
+	$ConfigControl/VBoxContainer/turn/Slider.connect("value_changed", self, "_on_NNConfig_changed", [$ConfigControl/VBoxContainer/turn])
+
+	$ConfigControl/VBoxContainer/population/Value.text = str(Global.POPULATION)
+	$ConfigControl/VBoxContainer/population/Slider.value = Global.POPULATION
+	$ConfigControl/VBoxContainer/population/Slider.connect("value_changed", self, "_on_NNConfig_changed", [$ConfigControl/VBoxContainer/population])
+
 func _on_Value_changed(value, node):
 	player.set(node.name, value)
 	node.get_node("Value").text = str(value)
@@ -76,3 +88,9 @@ func _on_ManualDrive_toggled(button_pressed):
 		emit_signal("manualDrive") 
 	else:
 		emit_signal("selfDrive") 
+
+func _on_DisplaySensor_toggled(button_pressed):
+	if button_pressed:
+		emit_signal("showSensor") 
+	else:
+		emit_signal("hideSensor") 

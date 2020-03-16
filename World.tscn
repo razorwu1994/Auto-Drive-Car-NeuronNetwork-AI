@@ -10,7 +10,6 @@ position = Vector2( 130.941, 125.298 )
 script = ExtResource( 1 )
 carX = 783.7
 carY = 360.322
-population_size = 25
 allow_rough_bestBoi = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -24,7 +23,9 @@ player_path = NodePath("../../Car")
 position = Vector2( 641.21, 412.983 )
 [connection signal="carSpawning" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_carSpawning"]
 [connection signal="discardBestBoi" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_discardBestBoi"]
+[connection signal="hideSensor" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_hideSensor"]
 [connection signal="manualDrive" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_manualDrive"]
 [connection signal="printBestNN" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_printBestNN"]
 [connection signal="selfDrive" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_selfDrive"]
+[connection signal="showSensor" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_showSensor"]
 [connection signal="useChampionBoi" from="CanvasLayer/ControlPanel" to="." method="_on_ControlPanel_useChampionBoi"]

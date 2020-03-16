@@ -24,6 +24,10 @@ var BEST_BOI_FPATH = "best_boi.sav"
 var SENSOR_SAFE_DISTANCE=20
 var SENSOR_TOLERANCE_OFFSET = 2
 
+# CAR CONFIG
+var TURN_ANGLE=22
+var POPULATION = 25
+
 func countNodeSize():
 	var sum=0
 	for node in LAYERS_CONFIGURE:

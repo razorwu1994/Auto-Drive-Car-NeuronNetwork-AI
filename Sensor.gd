@@ -38,7 +38,9 @@ func probe_obstacles():
 		else:
 			$ObstacleSign.visible=true
 			$ObstacleSign/Line2D.set_point_position(1,Vector2(0,obstacleDistance))
-			$ObstacleSign/Line2D.visible=false
+			
+			$ObstacleSign/Line2D.visible=get_parent().get_parent().SHOW_SENSOR
+			
 			$ObstacleSign/Sign.position=Vector2(0,obstacleDistance)
 	else:
 		globalDistance=Global.SUPA_LARGE_VALUE

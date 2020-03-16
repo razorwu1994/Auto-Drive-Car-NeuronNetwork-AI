@@ -1,16 +1,17 @@
 extends Node2D
 export (float) var carX = 400.092
 export (float) var carY = 2286
-export (int) var population_size = 20
+
 export (int) var engine_power = 2000
 export (bool) var use_file = false
 export (bool) var allow_rough_bestBoi = false
-export (int) var turn_angle = 22
 var BEST_PROGRESS=0
 var CAR = load("Car.tscn")
 var carsGameTree
 var generations
-var training
+var training #training indicator
+var turn_angle
+var population_size = Global.POPULATION
 # Helper functions
 func filter(filter_function: FuncRef, candidate_array: Array)->Array:
 	var filtered_array := []
@@ -51,6 +52,7 @@ func check_if_allDead():
 #	$CarTest/Camera2D.limit_bottom = map_limits.end.y * map_cellsize.y
 
 func _ready():
+	turn_angle = float($CanvasLayer/ControlPanel/ConfigControl/VBoxContainer/turn/Value.text)
 	generations=0
 	init_cars(init_with_file())
 	if self.has_node("Car"):
@@ -58,6 +60,7 @@ func _ready():
 			$CanvasLayer/ControlPanel/PanelContainer/ControlCenter/CheckButton.pressed=false
 	
 func init_cars(genes=[]):
+	population_size = int($CanvasLayer/ControlPanel/ConfigControl/VBoxContainer/population/Value.text)
 	var gene
 	carsGameTree=[]
 	if self.has_node("Car"):
@@ -71,7 +74,7 @@ func init_cars(genes=[]):
 		spawnedCar.position = Vector2(carX,carY)
 		spawnedCar.scale= Vector2(1,1)
 		spawnedCar.engine_power = engine_power
-		spawnedCar.steering_angle=turn_angle
+		spawnedCar.steering_angle=float($CanvasLayer/ControlPanel/ConfigControl/VBoxContainer/turn/Value.text)
 		self.add_child(spawnedCar)
 		spawn_one_car(spawnedCar,gene)
 		
@@ -125,7 +128,6 @@ func paintCars():
 	if liveCars.size()>0:
 		liveCars[0].carNode.get_node('Camera2D').current = true
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/speed/stat.text= "%4.1f" % liveCars[0].carNode.velocity.length()
-		$CanvasLayer/ControlPanel/Stats/ControlCenter/turn/stat.text= "%1.4f degree" % (liveCars[0].carNode.rotation*180/PI)
 		
 		var counter = 0
 		while counter < liveCars.size():
@@ -223,7 +225,7 @@ func checkIfEvolution():
 			else:
 				cross_variance=0
 			if geAlgo.CROSS_OVER(cross_variance):
-				children_genes=geAlgo.MUTATION(population_size,float($CanvasLayer/ControlPanel/ConfigControl/SettingSlider/Value.text),int(Global.MAX_FIT/BEST_BOI.progress))
+				children_genes=geAlgo.MUTATION(population_size,float($CanvasLayer/ControlPanel/ConfigControl/VBoxContainer/passion/Value.text),int(Global.MAX_FIT/BEST_BOI.progress))
 			var new_gene=[]
 			for gene in children_genes:
 				new_gene=Global.translate_genes(gene,Global.LAYERS_CONFIGURE)
@@ -233,15 +235,15 @@ func checkIfEvolution():
 #		print(carsGameTree[0].neuronNetwork.extract_genes())
 		generations+=1
 		$CanvasLayer/ControlPanel/Stats/ControlCenter/Generation/HBoxContainer/generation.text=str(generations)
-		lastBoys=goodBoys
+
 		goodBoys=0
-		$CanvasLayer/ControlPanel/Stats/ControlCenter/goodboi/stat.text=str(lastBoys)
-#		print("last run ",lastBoys)
+
+
 
 
 # Signal listener
 var goodBoys=0
-var lastBoys=0
+
 # Print out and remove success car	
 func _on_DashLine_finished(target):
 	for i in carsGameTree.size():
@@ -301,3 +303,11 @@ func _on_ControlPanel_manualDrive():
 func _on_ControlPanel_selfDrive():
 	if self.has_node("Car"):
 		self.get_node("Car").SELF_DRIVING=true
+
+var SHOW_SENSOR = false
+func _on_ControlPanel_showSensor():
+	SHOW_SENSOR= true
+
+
+func _on_ControlPanel_hideSensor():
+	SHOW_SENSOR=false
